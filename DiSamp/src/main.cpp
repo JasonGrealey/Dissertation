@@ -10,12 +10,10 @@
 //################THINGS TO DO####################################################################################
 //################################################################################################################
 //################################################################################################################
-	//begin to implement many types of cells and their mutation	
-	//look at cripping the normal type one cells
+	//LOOK AT CHANGING RANDOM NUMBER GENERATOR 	
 	//being to sample Xi, by bining types, then counting # of times a mut type appeared and bin it into Xi
 	//plot Xi against it's bins
 
-	//think about how to print these new types of cells for a diagram
 //################################################################################################################
 //################################################################################################################
 //################################################################################################################
@@ -34,7 +32,8 @@
 
 using namespace std;
 
-
+int Nmut=1 ;
+int Nspm=0 ;
 
  double Dis(int a, int b, int c, int d)
 	{
@@ -96,8 +95,31 @@ ostream & operator<<(ostream & Str, Grid const & v) {
     return Str;
 }
 
+
+
+class Genotype {
+	public:
+	
+	//defining integer vector containing mutation	
+	vector <int> mutations ;
+	//clearing the mutations
+	Genotype() { mutations.clear() ; }
+	
+		
+	Genotype( Genotype &prev) {
+		mutations = prev.mutations ;
+		prev.push_back(++Nspm) ;
+	}
+};
+
+vector <Genotype*> gens ;
+
+
 //grid constructor
 Grid::Grid(int p){
+	Genotype g0 ;
+	gens.clear() ;
+	gens.push_back(g0) ;
     //argument of Grid becomes length and height of grid
     L = p;
     //defining a grid as a 1-d Cell array
@@ -170,32 +192,41 @@ Grid::Grid(int p){
         do {
             x = rand()%L;
             y = rand()%L;
-            l = rand()%L;
-            m = rand()%L;
-            //ensuring x,y lie withing L-1 so that we can spread to edge
-            //           y = min(i+1,L-2);
-            //           x = min(j+1,L-2);
-            //cout << x << ' ' << i << ' '<< y << ' ' << j << endl;
             //if randomly selecting a infected cell
         } while(grid[x][y].Inf == 0) ;
-        
-        
-	
+        //constant arrays to choose spread direction
+	const int dx[4]={1,0,-1,0},dy[4]={0,1,0,-1} ;
+	int d=rand()%4 ;
+	if (grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Inf==0) {
+		grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Inf=1 ;
+		if (rand()%100==0) {
+			Nmut++ ;
+			cout << Nmut;
+			grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Type=Nmut ;
+			Genotype gnew(gens[grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Type-1]) ;
+			gens.push_back(gnew) ;
+		} else {
+			grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Type=grid[x][y].Type ;
+		}
+	}
+	        else{
+
+        }
 //===================================rightwards===================================
         
         //if(grid[x][(y+1)%L].Inf == 0 && grid[x][y].Type == 1 && rand()%5 !=0) {
 	
-	if(grid[x][(y+1)%L].Inf == 0 && grid[x][y].Type != 0 && grid[x][y].Type !=1) {          
-  	grid[x][(y+1)%L].Inf = 1;
-        grid[x][(y+1)%L].Type = grid[x][y].Type;
+//	if(grid[x][(y+1)%L].Inf == 0 && grid[x][y].Type != 0 && grid[x][y].Type !=1) {          
+//  	grid[x][(y+1)%L].Inf = 1;
+//        grid[x][(y+1)%L].Type = grid[x][y].Type;
 		//n = n +1;
-        }
+//        }
 	
-	else if(grid[x][(y+1)%L].Inf == 0 && grid[x][y].Type == 1 && rand()%5 !=0 ) {          
-  	grid[x][(y+1)%L].Inf = 1;
-        grid[x][(y+1)%L].Type = grid[x][y].Type;
+//	else if(grid[x][(y+1)%L].Inf == 0 && grid[x][y].Type == 1 && rand()%5 !=0 ) {          
+//  	grid[x][(y+1)%L].Inf = 1;
+//        grid[x][(y+1)%L].Type = grid[x][y].Type;
 		//n = n +1;
-        }
+//        }
 	//else if(grid[x][(y+1)%L].Inf == 0 && grid[x][y].Type == 2 ) {
         //    grid[x][(y+1)%L].Inf = 1;
         //    grid[x][(y+1)%L].Type = 2;
@@ -206,20 +237,20 @@ Grid::Grid(int p){
       
 	
 	  //else if(grid[x][(y-1+L)%L].Inf == 0 && grid[x][y].Type == 1 && rand()%5 !=0 ){
-	else if(grid[x][(y-1+L)%L].Inf == 0 && grid[x][y].Type != 0 && grid[x][y].Type !=1){          
-	  	grid[x][(y-1+L)%L].Inf=1;
-		grid[x][(y-1+L)%L].Type = grid[x][y].Type;
+//	else if(grid[x][(y-1+L)%L].Inf == 0 && grid[x][y].Type != 0 && grid[x][y].Type !=1){          
+//	  	grid[x][(y-1+L)%L].Inf=1;
+//		grid[x][(y-1+L)%L].Type = grid[x][y].Type;
 		//n = n +1;
             
-        }
+//        }
 
 	
-	else if(grid[x][(y-1+L)%L].Inf == 0 && grid[x][y].Type ==1 && rand()%5 !=0 ){          
-	  	grid[x][(y-1+L)%L].Inf=1;
-		grid[x][(y-1+L)%L].Type = grid[x][y].Type;
+//	else if(grid[x][(y-1+L)%L].Inf == 0 && grid[x][y].Type ==1 && rand()%5 !=0 ){          
+//	  	grid[x][(y-1+L)%L].Inf=1;
+//		grid[x][(y-1+L)%L].Type = grid[x][y].Type;
 		//n = n +1;
             
-        }
+//        }
   	//else if(grid[x][(y-1+L)%L].Inf == 0 && grid[x][y].Type == 2 ){
         //    grid[x][(y-1+L)%L].Inf=1;
 	//	grid[x][(y-1+L)%L].Type = 2;
@@ -232,19 +263,19 @@ Grid::Grid(int p){
        
 	
 	 //else if(grid[(x+1)%L][y].Inf == 0  && grid[x][y].Type == 1 && rand()%5 !=0){
-	else if(grid[(x+1)%L][y].Inf == 0  && grid[x][y].Type != 0 && grid[x][y].Type !=1){          
-	  	grid[(x+1)%L][y].Inf=1;
-		grid[(x+1)%L][y].Type = grid[x][y].Type;
+//	else if(grid[(x+1)%L][y].Inf == 0  && grid[x][y].Type != 0 && grid[x][y].Type !=1){          
+//	  	grid[(x+1)%L][y].Inf=1;
+//		grid[(x+1)%L][y].Type = grid[x][y].Type;
 		//n = n +1;
             
-        }
+//        }
 	
-	else if(grid[(x+1)%L][y].Inf == 0  && grid[x][y].Type == 1 && rand()%5 !=0 ){          
-	  	grid[(x+1)%L][y].Inf=1;
-		grid[(x+1)%L][y].Type = grid[x][y].Type;
+//	else if(grid[(x+1)%L][y].Inf == 0  && grid[x][y].Type == 1 && rand()%5 !=0 ){          
+//	  	grid[(x+1)%L][y].Inf=1;
+//		grid[(x+1)%L][y].Type = grid[x][y].Type;
 		//n = n +1;
             
-        }	
+//        }	
 	
 	
 
@@ -259,20 +290,20 @@ Grid::Grid(int p){
         
 	
 	//else if(grid[(x-1+L)%L][y].Inf==0 && grid[x][y].Type == 1 && rand()%5 !=0){
-	else if(grid[(x-1+L)%L][y].Inf==0 && grid[x][y].Type != 0 && grid[x][y].Type !=1){            	
-		grid[(x-1+L)%L][y].Inf=1;
-		grid[(x-1+L)%L][y].Type = grid[x][y].Type;
+//	else if(grid[(x-1+L)%L][y].Inf==0 && grid[x][y].Type != 0 && grid[x][y].Type !=1){            	
+//		grid[(x-1+L)%L][y].Inf=1;
+//		grid[(x-1+L)%L][y].Type = grid[x][y].Type;
 		//n = n +1;
             
-        }
+//        }
 	
 	
-	else if(grid[(x-1+L)%L][y].Inf==0 && grid[x][y].Type == 1 && rand()%5 !=0 ){            	
-		grid[(x-1+L)%L][y].Inf=1;
-		grid[(x-1+L)%L][y].Type = grid[x][y].Type;
-		//n = n +1;
+//	else if(grid[(x-1+L)%L][y].Inf==0 && grid[x][y].Type == 1 && rand()%5 !=0 ){            	
+//		grid[(x-1+L)%L][y].Inf=1;
+//		grid[(x-1+L)%L][y].Type = grid[x][y].Type;
+//		//n = n +1;
             
-        }	
+//        }	
 	
 	
 	
@@ -283,9 +314,7 @@ Grid::Grid(int p){
 	//	//n = n +1;
         //    
         //}
-        else{
 
-        }
         //cout << x+1 << ' ' << x-1 << ' '<< y+1 << ' ' << y-1 << endl;
         
 	//Changing Cell types with some probability
@@ -293,17 +322,17 @@ Grid::Grid(int p){
 	//the mutations can only go backwards or forwards by one here
 	
 	
-	for(int i=1;i<=types;i++){
-	if(grid[x][y].Type == i && rand()%50 == 2) {
-		grid[x][y].Type = i+1;
-		}
-	}
+//	for(int i=1;i<=types;i++){
+//	if(grid[x][y].Type == i && rand()%50 == 2) {
+//		grid[x][y].Type = i+1;
+//		}
+//	}
 	
-	for(int i=1;i<=types;i++){
-	if(grid[x][y].Type == i && rand()%50 == 2) {
-		grid[x][y].Type = i-1;
-		}
-	}	
+//	for(int i=1;i<=types;i++){
+//	if(grid[x][y].Type == i && rand()%50 == 2) {
+//		grid[x][y].Type = i-1;
+//		}
+//	}	
 
 
 
@@ -709,77 +738,6 @@ for (int i = 1; i <= 20; i++) {
 
 
 
-//previous infection method of translating the grid is not being used anymore
-// ---------------------------------------------------------------------------------------
-
-
-//}
-//g = & grid;
-
-
-
-//spreading loops a number of times and 1/6 of the time will spread to the right
-/// int b = 0;
-
-//for (int i =0; i<L; i ++) {
-
-// for (int j = 0; j<L; j ++) {
-
-
-//  cout << "is this working" << endl;
-//i = rand()%L;
-//j = rand()%L;
-
-//cout << i << j << endl;
-//cout << *this << endl;
-//Cell g = grid[i][j];
-
-// el ultimo
-//int y = min(j+1,L-1);
-//cout << grid[i][j].Inf << endl;
-//right neighbour will become infected with 1/6 probability
-//if ((grid[i][j].Inf) == 1 && grid[i][y].Inf ==0) {
-//grid[4][5].Inf = 1;
-// b = 1;
-//grid[i][y].Inf = 1;
-//cout << grid[i][y].Inf << endl;
-//cout << y << " " << j << endl;
-//cout << "success" << endl;
-//  break;
-//cout << "is this working" << endl;
-
-//  }
-//else grid[i+1][j].Inf = 0;
-// }//if(b==1) {break;}
-//}
-
-//}
-
-// --------------------------------------------------------------------------------------------------------
-
-//method for the spreading of cells
-//int **Grid::Spread(){
-
-//getting a checker that will randomly choose from grid and replicate infections to neighbours
-
-
-//}
-
-
-//right spreading method taking 2d array argument
-
-//int Grid::IRight(grid[i][j]){
-
-//int square
-// int y = min(i+1,L-2);
-// int x = min(j+1,L-2);
-//rightwards infection
-// if(grid[x][y+1].Inf == 0) {
-//  grid[x][y+1].Inf = 1;
-//}
-
-//}for (int i = 0; i < arrayLength; i++) {
-
 
 
 
@@ -878,6 +836,4 @@ int main() {
     //system("pause") ;
     return 0;
 } 
-
-
 
