@@ -457,7 +457,7 @@ Grid::Grid(int p){
 	arrayfile.open("array.txt",  ios::trunc);
 	for (int i =0;i<L;i++){
 	for (int j=0;j<L;j++){
-	array[i][j]=grid[i][j].Inf;
+	array[i][j]=grid[i][j].Type;
 	arrayfile << array[i][j] << ',';
 	}
 	arrayfile << endl;
