@@ -134,7 +134,7 @@ Grid::Grid(int p){
             
 		//making all cells uninfected
 		grid[i][j].Inf = 0;
-		//making all cells white type
+		//making all cells type zero
 		grid[i][j].Type = 0;
 
 		//infecting middle cell
