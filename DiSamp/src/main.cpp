@@ -97,29 +97,29 @@ ostream & operator<<(ostream & Str, Grid const & v) {
 
 
 
-class Genotype {
-	public:
+//class Genotype {
+//	public:
 	
 	//defining integer vector containing mutation	
-	vector <int> mutations ;
+//	vector <int> mutations ;
 	//clearing the mutations
-	Genotype() { mutations.clear() ; }
+//	Genotype() { mutations.clear() ; }
 	
 		
-	Genotype( Genotype &prev) {
-		mutations = prev.mutations ;
-		prev.push_back(++Nspm) ;
-	}
-};
+//	Genotype( Genotype &prev) {
+//		mutations = prev.mutations ;
+//		prev.push_back(++Nspm) ;
+//	}
+//};
 
-vector <Genotype*> gens ;
+//vector <Genotype*> gens ;
 
 
 //grid constructor
 Grid::Grid(int p){
-	Genotype g0 ;
-	gens.clear() ;
-	gens.push_back(g0) ;
+//	Genotype g0 ;
+//	gens.clear() ;
+//	gens.push_back(g0) ;
     //argument of Grid becomes length and height of grid
     L = p;
     //defining a grid as a 1-d Cell array
@@ -163,7 +163,7 @@ Grid::Grid(int p){
 	//double n = 1;
 	// setting matching parameter which is 1 if sampled types are the same and 0 otherwise 
 	double k = 0;
-	
+	int N=1;
 	double nsamp =0;
 	double phi = 0;
 	double dis;
@@ -185,7 +185,7 @@ Grid::Grid(int p){
 
 
 
-    //100000
+
     while (t <= 10000000) {
         
         int x,y,l,m ;
@@ -199,12 +199,13 @@ Grid::Grid(int p){
 	int d=rand()%4 ;
 	if (grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Inf==0) {
 		grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Inf=1 ;
+			N++;
 		if (rand()%100==0) {
 			Nmut++ ;
-			cout << Nmut;
+			//cout << Nmut << ',' <<N << endl;
 			grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Type=Nmut ;
-			Genotype gnew(gens[grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Type-1]) ;
-			gens.push_back(gnew) ;
+//			Genotype gnew(gens[grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Type-1]) ;
+//			gens.push_back(gnew) ;
 		} else {
 			grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Type=grid[x][y].Type ;
 		}
@@ -440,6 +441,34 @@ Grid::Grid(int p){
 		}	
 	//closing for loop	
 	}
+	
+	//creating an array the size of the lattice for printing 
+	int array [L][L];
+	for (int i =0;i<L;i++){
+	for (int j=0;j<L;j++){
+//	array [i][j]=0;
+	//cout << array[i][j] << endl;
+	}
+	}
+		
+	//now we need to format the printing into an array
+	
+	ofstream arrayfile;
+	arrayfile.open("array.txt",  ios::trunc);
+	for (int i =0;i<L;i++){
+	for (int j=0;j<L;j++){
+	array[i][j]=grid[i][j].Inf;
+	arrayfile << array[i][j] << ',';
+	}
+	arrayfile << endl;
+	}	
+		
+	
+	
+	arrayfile.close();
+	
+	
+	
 	
 	int npoints = 0;	
 	for(int i=0;i<=a;i++){	
