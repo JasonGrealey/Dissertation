@@ -3,7 +3,7 @@
 //  Simplemodel
 //
 //  Created by Jason Grealey on 26/09/2016.
-//  Copyright © 2016 Jason Grealey. All rights reserved.
+//  Copyright � 2016 Jason Grealey. All rights reserved.
 //
 
 //################################################################################################################
@@ -97,29 +97,33 @@ ostream & operator<<(ostream & Str, Grid const & v) {
 
 
 
-//class Genotype {
-//	public:
+class Genotype {
+	public:
 	
 	//defining integer vector containing mutation	
-//	vector <int> mutations ;
+	vector <int> mutations ;
 	//clearing the mutations
-//	Genotype() { mutations.clear() ; }
+	Genotype() { mutations.clear() ; }
 	
 		
-//	Genotype( Genotype &prev) {
-//		mutations = prev.mutations ;
-//		prev.push_back(++Nspm) ;
-//	}
-//};
+	Genotype( Genotype *prev) {
+		mutations = prev->mutations ;
+		mutations.push_back(++Nspm) ;
+	}
+  void print() {
+    for (int i=0;i<mutations.size();i++) cout <<mutations[i]<<" " ; cout <<endl ;
+  }
 
-//vector <Genotype*> gens ;
+};
+
+vector <Genotype*> gens ;
 
 
 //grid constructor
 Grid::Grid(int p){
-//	Genotype g0 ;
-//	gens.clear() ;
-//	gens.push_back(g0) ;
+	Genotype *g0=new Genotype() ;
+	gens.clear() ;
+	gens.push_back(g0) ;
     //argument of Grid becomes length and height of grid
     L = p;
     //defining a grid as a 1-d Cell array
@@ -204,8 +208,9 @@ Grid::Grid(int p){
 			Nmut++ ;
 			//cout << Nmut << ',' <<N << endl;
 			grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Type=Nmut ;
-//			Genotype gnew(gens[grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Type-1]) ;
-//			gens.push_back(gnew) ;
+//			if (grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Type<=0) cout <<"x" ;
+			Genotype *gnew=new Genotype(gens[grid[x][y].Type-1]) ;
+			gens.push_back(gnew) ;
 		} else {
 			grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Type=grid[x][y].Type ;
 		}
@@ -494,7 +499,7 @@ distfile.close();
 
 	int count[types];
 	int xi[types];
-	
+	//
 	for(int i=0;i<=types;i++){
 	count[i]=0;
 	xi[i]=0;
@@ -504,7 +509,7 @@ distfile.close();
 	int b,c;
 	for(int i =0; i<types; i++){
 	b = rand()%L;
-        c = rand()%L;
+    c = rand()%L;
 	//l = rand()%L;
 	//m = rand()%L;
 	
@@ -821,20 +826,19 @@ int main() {
     // cout << rand() % 100 + 1 << endl;
     
     //testing with grid of size length and height 100
-    Grid G(700);
+    Grid G(100);
+
+    cout <<"Ngens="<<gens.size()<<endl ;
+    for (int i=0;i<gens.size();i++) gens[i]->print() ;
     
-    // G = new Grid (10);
-    
+
     
     //printing the grid
     //cout << G;
     
-    //writing to a file
+
     
-    //opening a file and writing positions of the cells to it
-    
-    
-    //agadshgdahah
+   
     //initalising array d
     int* d ;
     
@@ -843,12 +847,7 @@ int main() {
 
 
 
-	//testing the distance method
-	//double alpha;
-	//alpha = Dis(320,167,102,120);
 
-
-	//cout << alpha << endl; 
 
 
 
@@ -862,7 +861,6 @@ int main() {
     //}
     //cout << endl;
     
-    //system("pause") ;
+
     return 0;
 } 
-
