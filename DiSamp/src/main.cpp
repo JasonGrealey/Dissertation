@@ -100,27 +100,42 @@ ostream & operator<<(ostream & Str, Grid const & v) {
 class Genotype {
 	public:
 	
-	//defining integer vector containing mutation	
+	//defining integer vector containing numbers of mutation
 	vector <int> mutations ;
-	//clearing the mutations
+	//clearing the mutations sopy constructor
 	Genotype() { mutations.clear() ; }
 	
-		
+		//genotype with pointer argument
 	Genotype( Genotype *prev) {
+            //mutations is vector, takes pointer argument
 		mutations = prev->mutations ;
+        //we add to this vector a new value of Nspm
 		mutations.push_back(++Nspm) ;
 	}
+    //print function, prints the mutations contained in a genotype
   void print() {
     for (int i=0;i<mutations.size();i++) cout <<mutations[i]<<" " ; cout <<endl ;
-  }
+                }
+    //function to return the number of mutations present in a cell
+    int Size()
+    {
+        int sum=1;
+        for (int i=0;i<mutations.size();i++){
+            sum ++;
+        }
+        return sum;
+            }
+   
 
 };
 
+//creating genotrpe vector
 vector <Genotype*> gens ;
 
 
 //grid constructor
 Grid::Grid(int p){
+    //initalising genotypes into the grid
 	Genotype *g0=new Genotype() ;
 	gens.clear() ;
 	gens.push_back(g0) ;
@@ -200,18 +215,29 @@ Grid::Grid(int p){
         } while(grid[x][y].Inf == 0) ;
         //constant arrays to choose spread direction
 	const int dx[4]={1,0,-1,0},dy[4]={0,1,0,-1} ;
+        //random integer to choose direction of spread
 	int d=rand()%4 ;
+            //replication and mutation
 	if (grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Inf==0) {
 		grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Inf=1 ;
+            //number of cells increases
 			N++;
+            //1 in 100 chance of mutation given infected cell picked
 		if (rand()%100==0) {
 			Nmut++ ;
-			//cout << Nmut << ',' <<N << endl;
+            //new type taken on at daughter cell
 			grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Type=Nmut ;
-//			if (grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Type<=0) cout <<"x" ;
+            
+            //new genotype takes parents type - 1
 			Genotype *gnew=new Genotype(gens[grid[x][y].Type-1]) ;
-			gens.push_back(gnew) ;
-		} else {
+            
+			//this new genotype is then pushed to the back of the daugthers genotype
+            gens.push_back(gnew) ;
+		}
+            //replication only
+            else {
+                //again number of cells increases
+                N++;
 			grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Type=grid[x][y].Type ;
 		}
 	}
@@ -829,10 +855,43 @@ int main() {
     Grid G(100);
 
     cout <<"Ngens="<<gens.size()<<endl ;
-    for (int i=0;i<gens.size();i++) gens[i]->print() ;
-    
+/*   for (int i=0;i<gens.size();i++)
+        {
+            gens[i]->print();
+            }
+  */
+  //  cout << gens.size();
+    int chi[gens.size()];
+    for(int i =0;i<=gens.size();i++){
+        chi[i]=0;
+       // cout << chi[i] << ' ' << i << endl;
+    }
+    for (int i =0; i<=100; i++)
+    {
+        for(int j=0;j<=100; j++)
+        {
+            int a = gens[j]->Size();
+             if(i==a) {
+                chi[i]=chi[i]+1;
+                cout<<chi[i] <<' '<< i<< endl;
+             }
+             else{
+                 }
+            
+            /*(i==gens[j]->Size()){
+                chi[i]++;
+               cout << chi[i] << endl;
+            }*/
+        //gens[i]->Size();
+    }
+      //    cout << chi[i] << endl;
+        //Genotype *a;
+        //a[i] = gens[i];
+       // gens[i]->print()
+    }
 
-    
+
+
     //printing the grid
     //cout << G;
     
