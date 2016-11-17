@@ -119,9 +119,9 @@ class Genotype {
     //function to return the number of mutations present in a cell
     int Size()
     {
-        int sum=1;
+        int sum=0;
         for (int i=0;i<mutations.size();i++){
-            sum ++;
+           if(mutations[i]!=0){ sum ++; }
         }
         return sum;
             }
@@ -229,8 +229,8 @@ Grid::Grid(int p){
 			grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Type=Nmut ;
             
             //new genotype takes parents type - 1
-			Genotype *gnew=new Genotype(gens[grid[x][y].Type-1]) ;
-            
+			//Genotype *gnew=new Genotype(gens[grid[x][y].Type-1]) ;
+            		Genotype *gnew=new Genotype(gens[grid[x][y].Type -1]) ;
 			//this new genotype is then pushed to the back of the daugthers genotype
             gens.push_back(gnew) ;
 		}
@@ -852,7 +852,15 @@ int main() {
     // cout << rand() % 100 + 1 << endl;
     
     //testing with grid of size length and height 100
-    Grid G(100);
+    Grid G(1000);
+
+	ofstream chifile;
+    chifile.open("chi.txt");
+
+
+
+
+
 
     cout <<"Ngens="<<gens.size()<<endl ;
 /*   for (int i=0;i<gens.size();i++)
@@ -864,11 +872,41 @@ int main() {
     int chi[gens.size()];
     for(int i =0;i<=gens.size();i++){
         chi[i]=0;
+	//to compensate for the first mutation being not being counted
+	// i increase the value of chi[1] to compensate for this	
+	if(i==1){
+		chi[i]=chi[i]+1;
+		}       
        // cout << chi[i] << ' ' << i << endl;
     }
-    for (int i =0; i<=100; i++)
-    {
-        for(int j=0;j<=100; j++)
+
+
+    for (int i =0; i<= (gens.size()-1); i++)
+    {	//cout << gens[i]->Size() << endl; 
+	for(int j=0; j<=(gens.size()-1); j++)
+        {
+            int a = gens[j]->Size();
+             if(i==a) {
+                chi[i]=chi[i]+1;
+             
+             }      
+		else{
+                 } 
+	}
+	
+	}
+	for (int i = 1; i <= (gens.size()-1); i++){
+	chifile << i << ',' << chi[i] << endl;
+	}
+	
+	
+	chifile.close();
+	/*for (int i =0; i<=(gens.size()-1); i++)
+	{gens[i]-> print();
+	}
+	*/
+	
+        /*for(int j=0;j<=100; j++)
         {
             int a = gens[j]->Size();
              if(i==a) {
@@ -876,19 +914,19 @@ int main() {
                 cout<<chi[i] <<' '<< i<< endl;
              }
              else{
-                 }
+                 } */
             
             /*(i==gens[j]->Size()){
                 chi[i]++;
                cout << chi[i] << endl;
             }*/
         //gens[i]->Size();
-    }
+    
       //    cout << chi[i] << endl;
         //Genotype *a;
         //a[i] = gens[i];
        // gens[i]->print()
-    }
+    //}
 
 
 
