@@ -125,7 +125,7 @@ class Genotype {
         return sum;
             }
   //method for increasing mutbins values s.t we can count #times each mutation is present 
-	void MutCount(vector<int>* mutbin){
+	void MutCount(vector<int> mutbin){
 	for (int i=0;i<mutations.size();i++){
 	vector <int> mutbin;
 	mutbin[mutations[i]] = mutbin[mutations[i]] + 1;
@@ -236,32 +236,30 @@ Grid::Grid(int p){
 	
 
 		N++;
-
-	gens[grid[x][y].Type]->MutCount(bin*);
-
+		
+		
+		
+		
 
             //1 in 100 chance of mutation given infected cell picked
 		if (rand()%100==0) {
 			Nmut++ ;
-            //new type taken on at daughter cell
+		//new type taken on at daughter cell
 			grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Type=Nmut ;
 		//want here to update the number             
 		
+		//new genotype takes parents type - 1
 
+		Genotype *gnew=new Genotype(gens[grid[x][y].Type -1]) ;
 
-
-
-
-            //new genotype takes parents type - 1
-			//Genotype *gnew=new Genotype(gens[grid[x][y].Type-1]) ;
-            		Genotype *gnew=new Genotype(gens[grid[x][y].Type -1]) ;
-			//this new genotype is then pushed to the back of the daugthers genotype
-            gens.push_back(gnew) ;
+		//this new genotype is then pushed to the back of the daugthers genotype
+		gens.push_back(gnew) ;
 		}
             //replication only
             else {
                 //again number of cells increases
 			grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Type=grid[x][y].Type ;
+			gens[grid[x][y].Type-1]->MutCount(bin);
 		}
 	}
 	        else{
@@ -956,8 +954,10 @@ int main() {
     //printing the grid
     //cout << G;
     
-
-    
+/*	for (int i =0; i<=(gens.size()-1);i++){
+	cout<<bin[i]<<endl;
+	}
+*/    
    
     //initalising array d
     int* d ;
