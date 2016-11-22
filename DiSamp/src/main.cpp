@@ -11,8 +11,7 @@
 //################################################################################################################
 //################################################################################################################
 	//LOOK AT CHANGING RANDOM NUMBER GENERATOR 	
-	//being to sample Xi, by bining types, then counting # of times a mut type appeared and bin it into Xi
-	//plot Xi against it's bins
+	// Xi, is now the number of times which any certain mutation appears, eg is mut 1 occurs 100 times then xi_100 ++ 
 
 //################################################################################################################
 //################################################################################################################
@@ -52,7 +51,7 @@ public:
 	int Type;
     
 
-    // don't need this attribute because it can make it too complicated for updating after infections
+    //don't need this attribute because it can make it too complicated for updating after infections
     //int IsAble;
     
     
@@ -125,12 +124,26 @@ class Genotype {
         }
         return sum;
             }
-   
+  //method for increasing mutbins values s.t we can count #times each mutation is present 
+	void MutCount(vector<int>* mutbin){
+	for (int i=0;i<mutations.size();i++){
+	vector <int> mutbin;
+	mutbin[mutations[i]] = mutbin[mutations[i]] + 1;
+
+		}	
+	}
 
 };
 
-//creating genotrpe vector
+//creating genotype vector
 vector <Genotype*> gens ;
+vector <int> bin;
+//bin.clear();
+
+
+//for(int i =0;i
+//creating number vector
+//vector <int> numb;
 
 
 //grid constructor
@@ -139,6 +152,7 @@ Grid::Grid(int p){
 	Genotype *g0=new Genotype() ;
 	gens.clear() ;
 	gens.push_back(g0) ;
+	
     //argument of Grid becomes length and height of grid
     L = p;
     //defining a grid as a 1-d Cell array
@@ -179,7 +193,7 @@ Grid::Grid(int p){
 	//setting time parameter
 	int t = 0;
 	// setting number of infected parameter
-	//double n = 1;
+	//double n = 1;vector<int>* random
 	// setting matching parameter which is 1 if sampled types are the same and 0 otherwise 
 	double k = 0;
 	int N=1;
@@ -198,9 +212,7 @@ Grid::Grid(int p){
 	
 	
 	
-	//divide k/n when t is of certain values
-	// let n and k build per infections and then also
-	//if loop for k if sampled infected points are of the same type 
+
 
 
 
@@ -221,13 +233,25 @@ Grid::Grid(int p){
 	if (grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Inf==0) {
 		grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Inf=1 ;
             //number of cells increases
-			N++;
+	
+
+		N++;
+
+	gens[grid[x][y].Type]->MutCount(bin*);
+
+
             //1 in 100 chance of mutation given infected cell picked
 		if (rand()%100==0) {
 			Nmut++ ;
             //new type taken on at daughter cell
 			grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Type=Nmut ;
-            
+		//want here to update the number             
+		
+
+
+
+
+
             //new genotype takes parents type - 1
 			//Genotype *gnew=new Genotype(gens[grid[x][y].Type-1]) ;
             		Genotype *gnew=new Genotype(gens[grid[x][y].Type -1]) ;
@@ -237,7 +261,6 @@ Grid::Grid(int p){
             //replication only
             else {
                 //again number of cells increases
-                N++;
 			grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Type=grid[x][y].Type ;
 		}
 	}
