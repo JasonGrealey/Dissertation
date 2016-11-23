@@ -122,11 +122,10 @@ class Genotype {
         return sum;
             }
   //method for increasing mutbins values s.t we can count #times each mutation is present 
-	void MutCount(vector<int> mutbin){
+	void MutCount(vector<int> &mutbin){
 	for (int i=0;i<mutations.size();i++){
 	//vector <int> mutbin;
-	int a = mutations.at(i);
-	mutbin[a] ++;
+		mutbin[mutations[i]] = mutbin[mutations[i]] +1;
 
 		}	
 	}
@@ -144,7 +143,7 @@ class Genotype {
 //creating genotype vector
 vector <Genotype*> gens ;
 
-	vector <int> bin (3000);
+vector <int> bin (3000);
 
 	
 
@@ -227,7 +226,7 @@ Grid::Grid(int p){
 //for int
 //-1
 
-    while (t <= 1000000) {
+    while (t <= 10000000) {
         
         int x,y,l,m ;
         do {
@@ -264,8 +263,9 @@ Grid::Grid(int p){
 
 		//this new genotype is then pushed to the back of the daugthers genotype
 		//also from argument of the constructor we add Nmut++ also
-		gens.push_back(gnew) ;
 		gnew->MutCount(bin);
+            gens.push_back(gnew) ;
+		
 		}
             //replication only
             else {
@@ -533,7 +533,7 @@ Grid::Grid(int p){
 	arrayfile.close();
 	
 	
-	
+	//here we are outputting the graph of distance vs amount of times where types are similar
 	
 	int npoints = 0;	
 	for(int i=0;i<=a;i++){	
@@ -553,7 +553,7 @@ Grid::Grid(int p){
 
 //============================ sampling large number of points =============================================
 
-
+/*
 	ofstream xifile;
 	xifile.open("xi.txt",  ios::trunc);
 
@@ -600,7 +600,7 @@ Grid::Grid(int p){
 	xifile.close();
 
 
-
+*/
 
 
 
@@ -727,7 +727,7 @@ Grid::Grid(int p){
 	
 
 
-
+/*
 for (int i = 1; i <= 20; i++) {
 	stringstream a;
 	a << i;
@@ -755,7 +755,7 @@ for (int i = 1; i <= 20; i++) {
 	
 	
 }	
-	
+	*/
 	
 
   
@@ -886,7 +886,7 @@ int main() {
     // cout << rand() % 100 + 1 << endl;
     
     //testing with grid of size length and height 100
-    Grid G(100);
+    Grid G(1000);
 
 	ofstream chifile;
     chifile.open("chi.txt");
@@ -975,13 +975,43 @@ int main() {
     //initalising array d
     int* d ;
     
+    
+    
+    
+    
+        int chinew[gens.size()];
 	for(int i=0;i<=(gens.size());i++){
-	cout << bin.at(i) << endl;
+	//cout << bin.at(i) << endl;
+        chinew[i]=0;
 	}
 
+    //now to create a hist bin
+    //here we are comparing the actual value form the paper of (Xi) ling et all
 
-
-
+    
+    ofstream chinewfile;
+    chinewfile.open("chinew.txt");
+    for (int i =0; i<= (gens.size()-1); i++)
+    {	//cout << gens[i]->Size() << endl;
+        for(int j=0; j<=(gens.size()-1); j++)
+        {
+            if (bin.at(j)==i) {
+                chinew[i]++;
+            }
+                
+            
+            else{
+            }
+        }
+        
+    }
+    for (int i=0; i<=gens.size(); i++) {
+        chinewfile << i << ',' << chinew[i] << endl;
+        cout << chinew[i] << endl;
+    }
+    
+    chinewfile.close();
+    
 
 
 
