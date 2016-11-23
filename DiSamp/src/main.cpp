@@ -50,9 +50,6 @@ public:
 	//introducting cell type
 	int Type;
     
-
-    //don't need this attribute because it can make it too complicated for updating after infections
-    //int IsAble;
     
     
 };
@@ -104,11 +101,11 @@ class Genotype {
 	//clearing the mutations sopy constructor
 	Genotype() { mutations.clear() ; }
 	
-		//genotype with pointer argument
+		//genotype constructor with pointer argument
 	Genotype( Genotype *prev) {
-            //mutations is vector, takes pointer argument
+	//constructor with new genotype argument copies old mutations
 		mutations = prev->mutations ;
-        //we add to this vector a new value of Nspm
+        //and now also we push back the new mutation 
 		mutations.push_back(++Nspm) ;
 	}
     //print function, prints the mutations contained in a genotype
@@ -127,21 +124,34 @@ class Genotype {
   //method for increasing mutbins values s.t we can count #times each mutation is present 
 	void MutCount(vector<int> mutbin){
 	for (int i=0;i<mutations.size();i++){
-	vector <int> mutbin;
-	mutbin[mutations[i]] = mutbin[mutations[i]] + 1;
+	//vector <int> mutbin;
+	int a = mutations.at(i);
+	mutbin[a] ++;
 
 		}	
 	}
 
+/*	void MutCount(int *mutbin){
+	for (int i=0;i<mutations.size();i++){
+	//vector <int> mutbin;
+	mutbin[mutations[i]] = mutbin[mutations[i]] + 1;
+
+		}	
+	}
+*/
 };
 
 //creating genotype vector
 vector <Genotype*> gens ;
-vector <int> bin;
+
+	vector <int> bin (3000);
+
+	
+
 //bin.clear();
 
 
-//for(int i =0;i
+
 //creating number vector
 //vector <int> numb;
 
@@ -209,15 +219,15 @@ Grid::Grid(int p){
 	//double ntimesteps = 100000;
 	//double tnorm = t/ntimesteps;
 	
+
 	
 	
-	
 
+//int bin[gens.size()];
+//for int
+//-1
 
-
-
-
-    while (t <= 10000000) {
+    while (t <= 1000000) {
         
         int x,y,l,m ;
         do {
@@ -253,13 +263,16 @@ Grid::Grid(int p){
 		Genotype *gnew=new Genotype(gens[grid[x][y].Type -1]) ;
 
 		//this new genotype is then pushed to the back of the daugthers genotype
+		//also from argument of the constructor we add Nmut++ also
 		gens.push_back(gnew) ;
+		gnew->MutCount(bin);
 		}
             //replication only
             else {
                 //again number of cells increases
 			grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Type=grid[x][y].Type ;
 			gens[grid[x][y].Type-1]->MutCount(bin);
+	//		for(int i=1;i<gens.size();i++){cout << bin[i] << endl;};
 		}
 	}
 	        else{
@@ -535,7 +548,7 @@ Grid::Grid(int p){
 	distfile << i << "," << histd[a] << endl;
 	//cout << i << hist[i] << endl;	
 	}
-distfile.close();
+	distfile.close();
 
 
 //============================ sampling large number of points =============================================
@@ -873,7 +886,7 @@ int main() {
     // cout << rand() % 100 + 1 << endl;
     
     //testing with grid of size length and height 100
-    Grid G(1000);
+    Grid G(100);
 
 	ofstream chifile;
     chifile.open("chi.txt");
@@ -962,7 +975,9 @@ int main() {
     //initalising array d
     int* d ;
     
-
+	for(int i=0;i<=(gens.size());i++){
+	cout << bin.at(i) << endl;
+	}
 
 
 
