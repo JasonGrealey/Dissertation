@@ -78,6 +78,8 @@ public:
     
 };
 
+
+/*
 ostream & operator<<(ostream & Str, Grid const & v) {
     // print something from v to str, e.g: Str << v.getX();
     for (int i =0; i<v.L; i ++) {
@@ -90,7 +92,7 @@ ostream & operator<<(ostream & Str, Grid const & v) {
     }
     return Str;
 }
-
+*/
 
 
 class Genotype {
@@ -232,6 +234,8 @@ Grid::Grid(int p){
         do {
             x = rand()%L;
             y = rand()%L;
+            m = rand()%L;
+            l = rand()%L;
             //if randomly selecting a infected cell
         } while(grid[x][y].Inf == 0) ;
         //constant arrays to choose spread direction
@@ -239,10 +243,14 @@ Grid::Grid(int p){
         //random integer to choose direction of spread
 	int d=rand()%4 ;
             //replication and mutation
-	if (grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Inf==0) {
-		grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Inf=1 ;
+	//if (grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Inf==0) {
+	//	grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Inf=1 ;
             //number of cells increases
 	
+        
+        //non-spatial
+        if (grid[l][m].Inf==0) {
+            grid[l][m].Inf=1 ;
 
 		N++;
 		
@@ -254,8 +262,17 @@ Grid::Grid(int p){
 		if (rand()%100==0) {
 			Nmut++ ;
 		//new type taken on at daughter cell
-			grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Type=Nmut ;
-		//want here to update the number             
+			//grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Type=Nmut ;
+		
+            //non-spatial
+            grid[l][m].Type=Nmut ;
+            
+            
+            
+            
+            
+            
+            //want here to update the number
 		
 		//new genotype takes parents type - 1
 
@@ -270,8 +287,14 @@ Grid::Grid(int p){
             //replication only
             else {
                 //again number of cells increases
-			grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Type=grid[x][y].Type ;
-			gens[grid[x][y].Type-1]->MutCount(bin);
+			//grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Type=grid[x][y].Type ;
+			
+                //non-spatial again
+                grid[l][m].Type=grid[x][y].Type ;
+                
+                
+                
+                gens[grid[x][y].Type-1]->MutCount(bin);
 	//		for(int i=1;i<gens.size();i++){cout << bin[i] << endl;};
 		}
 	}
@@ -484,7 +507,7 @@ Grid::Grid(int p){
 	int x,y,l,m;
 	for(int i =0; i<1000000; i++){
 	x = rand()%L;
-        y = rand()%L;
+    y = rand()%L;
 	l = rand()%L;
 	m = rand()%L;
 	
