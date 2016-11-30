@@ -142,7 +142,7 @@ class Genotype {
 //creating genotype vector
 vector <Genotype*> gens ;
 
-vector <int> bin (3000);
+vector <int> bin (10000);
 
 	
 
@@ -219,11 +219,136 @@ Grid::Grid(int p){
 	
 
 	
-	
+	//now to remove the spatial dependence
 
 //int bin[gens.size()];
 //for int
 //-1
+
+    while (t <= 100000) {
+        
+        int x,y,l,m ;
+        do {
+            x = rand()%L;
+            y = rand()%L;
+		l=rand()%L;
+		m=rand()%L;
+            //if randomly selecting a infected cell
+        } while(grid[x][y].Inf == 0) ;
+
+
+	/*
+        //constant arrays to choose spread direction
+	const int dx[4]={1,0,-1,0},dy[4]={0,1,0,-1} ;
+        //random integer to choose direction of spread
+	int d=rand()%4 ;
+            //replication and mutation
+	
+
+	*/
+
+
+/*	if (grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Inf==0) {
+		grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Inf=1 ;
+  */         
+
+
+
+	 //number of cells increases
+	
+
+	
+	if (grid[(l)%L][(m)%L].Inf==0) {
+		grid[(l)%L][(m)%L].Inf=1 ;
+            //number of cells increases
+	
+
+		N++;
+		
+		
+		
+		
+
+            //1 in 100 chance of mutation given infected cell picked
+	
+		
+		if (rand()%100==0) {
+			Nmut++ ;
+
+		//cout << " a " << endl;
+		//new type taken on at daughter cell
+//			grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Type=Nmut ;
+
+		// non spatial
+
+			grid[(l)%L][(m)%L].Type=Nmut ;
+
+		//cout << "b" << endl;
+		
+		//want here to update the number             
+		
+		//new genotype takes parents type - 1
+
+		Genotype *gnew=new Genotype(gens[grid[x][y].Type -1]) ;
+		//cout << "c" << endl;
+		//this new genotype is then pushed to the back of the daugthers genotype
+		//also from argument of the constructor we add Nmut++ also
+		gnew->MutCount(bin);
+		//cout << "d" << endl;
+ 		
+	
+			
+		gens.push_back(gnew) ;
+		//cout << "e" << endl;		
+	}
+           
+		
+
+				 //replication only
+            else {
+
+			
+                //again number of cells increases
+		//	grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Type=grid[x][y].Type ;
+		//non spatial		
+	
+			//new random cell takes same type 
+			
+		//	cout << "a" << endl;	
+			grid[(l)%L][(m)%L].Type = grid[x][y].Type ;
+	
+			//counting mutations present in the parent cell
+			gens[grid[x][y].Type-1]->MutCount(bin);
+	//		for(int i=1;i<gens.size();i++){cout << bin[i] << endl;};
+		}
+	}
+	        else{
+
+        }
+
+
+
+
+	
+	//here write to a new file the value of k/n for 100 timesteps        
+        //if( fmod(t,100) == 0 && t >= 2500){
+	//...
+	//phi = k/(nsamp);
+	//ofstream timefile;
+	//timefile.open("phitime.txt", ios::trunc);
+	
+	//cout << t << " " << nsamp << " " << k << endl;
+	//distfile << t << "," << phi << endl;
+
+	//closing the phi file
+	
+	//}
+        
+        t = t + 1;
+	//cout << t << endl;
+    }
+   
+/*	spatial loop
 
     while (t <= 10000000) {
         
@@ -463,9 +588,8 @@ Grid::Grid(int p){
         t = t + 1;
 	//cout << t << endl;
     }
-   
 
-
+*/
 
 	//making a file to pring phi and distance to.
 	ofstream distfile;
