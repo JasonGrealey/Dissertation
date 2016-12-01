@@ -225,6 +225,11 @@ Grid::Grid(int p){
 //for int
 //-1
 
+
+
+
+/*
+
     while (t <= 100000) {
         
         int x,y,l,m ;
@@ -235,7 +240,7 @@ Grid::Grid(int p){
 		m=rand()%L;
             //if randomly selecting a infected cell
         } while(grid[x][y].Inf == 0) ;
-
+*/
 
 	/*
         //constant arrays to choose spread direction
@@ -248,16 +253,16 @@ Grid::Grid(int p){
 	*/
 
 
-/*	if (grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Inf==0) {
+	/*	if (grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Inf==0) {
 		grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Inf=1 ;
-  */         
+	  */         
 
 
 
 	 //number of cells increases
 	
 
-	
+/*
 	if (grid[(l)%L][(m)%L].Inf==0) {
 		grid[(l)%L][(m)%L].Inf=1 ;
             //number of cells increases
@@ -277,7 +282,7 @@ Grid::Grid(int p){
 
 		//cout << " a " << endl;
 		//new type taken on at daughter cell
-//			grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Type=Nmut ;
+	//			grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Type=Nmut ;
 
 		// non spatial
 
@@ -347,8 +352,20 @@ Grid::Grid(int p){
         t = t + 1;
 	//cout << t << endl;
     }
-   
-/*	spatial loop
+
+
+*/
+
+
+
+
+
+
+
+
+
+
+//	spatial loop
 
     while (t <= 10000000) {
         
@@ -589,7 +606,7 @@ Grid::Grid(int p){
 	//cout << t << endl;
     }
 
-*/
+
 
 	//making a file to pring phi and distance to.
 	ofstream distfile;
