@@ -141,8 +141,8 @@ class Genotype {
 
 //creating genotype vector
 vector <Genotype*> gens ;
-
-vector <int> bin (10000);
+//doing 150000 mutations bin
+vector <int> bin (12000);
 
 	
 
@@ -367,10 +367,19 @@ Grid::Grid(int p){
 
 //	spatial loop
 
-    while (t <= 10000000) {
-        
+    while (t <= 1000000000) {
+       // while(N<=1000000 || Nmut == 100000){
         int x,y,l,m ;
-        do {
+        
+	 if( Nmut == 10000 || N == 1000000){
+		cout << N << endl;		
+		break;	
+		}
+
+
+
+	do {
+		
             x = rand()%L;
             y = rand()%L;
             //if randomly selecting a infected cell
@@ -380,13 +389,16 @@ Grid::Grid(int p){
         //random integer to choose direction of spread
 	int d=rand()%4 ;
             //replication and mutation
+		  
 	if (grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Inf==0) {
 		grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Inf=1 ;
             //number of cells increases
 	
 
 		N++;
-		
+		if( fmod(N,10000) == 0){
+		cout <<	"Ncells = " << N << " , "  << "Nmut =" << " "  << Nmut << endl;
+		}
 		
 		
 		
@@ -416,131 +428,7 @@ Grid::Grid(int p){
 	//		for(int i=1;i<gens.size();i++){cout << bin[i] << endl;};
 		}
 	}
-	        else{
-
-        }
-//===================================rightwards===================================
-        
-        //if(grid[x][(y+1)%L].Inf == 0 && grid[x][y].Type == 1 && rand()%5 !=0) {
-	
-//	if(grid[x][(y+1)%L].Inf == 0 && grid[x][y].Type != 0 && grid[x][y].Type !=1) {          
-//  	grid[x][(y+1)%L].Inf = 1;
-//        grid[x][(y+1)%L].Type = grid[x][y].Type;
-		//n = n +1;
-//        }
-	
-//	else if(grid[x][(y+1)%L].Inf == 0 && grid[x][y].Type == 1 && rand()%5 !=0 ) {          
-//  	grid[x][(y+1)%L].Inf = 1;
-//        grid[x][(y+1)%L].Type = grid[x][y].Type;
-		//n = n +1;
-//        }
-	//else if(grid[x][(y+1)%L].Inf == 0 && grid[x][y].Type == 2 ) {
-        //    grid[x][(y+1)%L].Inf = 1;
-        //    grid[x][(y+1)%L].Type = 2;
-		//n = n +1;
-        //}
-        
-//==================================leftwards=============================================
-      
-	
-	  //else if(grid[x][(y-1+L)%L].Inf == 0 && grid[x][y].Type == 1 && rand()%5 !=0 ){
-//	else if(grid[x][(y-1+L)%L].Inf == 0 && grid[x][y].Type != 0 && grid[x][y].Type !=1){          
-//	  	grid[x][(y-1+L)%L].Inf=1;
-//		grid[x][(y-1+L)%L].Type = grid[x][y].Type;
-		//n = n +1;
-            
-//        }
-
-	
-//	else if(grid[x][(y-1+L)%L].Inf == 0 && grid[x][y].Type ==1 && rand()%5 !=0 ){          
-//	  	grid[x][(y-1+L)%L].Inf=1;
-//		grid[x][(y-1+L)%L].Type = grid[x][y].Type;
-		//n = n +1;
-            
-//        }
-  	//else if(grid[x][(y-1+L)%L].Inf == 0 && grid[x][y].Type == 2 ){
-        //    grid[x][(y-1+L)%L].Inf=1;
-	//	grid[x][(y-1+L)%L].Type = 2;
-		//n = n +1;
-            
-       // }
-        
-
-//=========================downwards====================================================
-       
-	
-	 //else if(grid[(x+1)%L][y].Inf == 0  && grid[x][y].Type == 1 && rand()%5 !=0){
-//	else if(grid[(x+1)%L][y].Inf == 0  && grid[x][y].Type != 0 && grid[x][y].Type !=1){          
-//	  	grid[(x+1)%L][y].Inf=1;
-//		grid[(x+1)%L][y].Type = grid[x][y].Type;
-		//n = n +1;
-            
-//        }
-	
-//	else if(grid[(x+1)%L][y].Inf == 0  && grid[x][y].Type == 1 && rand()%5 !=0 ){          
-//	  	grid[(x+1)%L][y].Inf=1;
-//		grid[(x+1)%L][y].Type = grid[x][y].Type;
-		//n = n +1;
-            
-//        }	
-	
-	
-
-	//  else if(grid[(x+1)%L][y].Inf == 0  && grid[x][y].Type == 2 ){
-        //    grid[(x+1)%L][y].Inf=1;
-	//	grid[(x+1)%L][y].Type = 2;
-	//	//n = n +1;
-	//   
-	// }
-
-//===============================upwards================================================
-        
-	
-	//else if(grid[(x-1+L)%L][y].Inf==0 && grid[x][y].Type == 1 && rand()%5 !=0){
-//	else if(grid[(x-1+L)%L][y].Inf==0 && grid[x][y].Type != 0 && grid[x][y].Type !=1){            	
-//		grid[(x-1+L)%L][y].Inf=1;
-//		grid[(x-1+L)%L][y].Type = grid[x][y].Type;
-		//n = n +1;
-            
-//        }
-	
-	
-//	else if(grid[(x-1+L)%L][y].Inf==0 && grid[x][y].Type == 1 && rand()%5 !=0 ){            	
-//		grid[(x-1+L)%L][y].Inf=1;
-//		grid[(x-1+L)%L][y].Type = grid[x][y].Type;
-//		//n = n +1;
-            
-//        }	
-	
-	
-	
-	
-       // else if(grid[(x-1+L)%L][y].Inf==0 && grid[x][y].Type == 2){
-       //     grid[(x-1+L)%L][y].Inf=1;
-	//		grid[(x-1+L)%L][y].Type = 2;
-	//	//n = n +1;
-        //    
-        //}
-
-        //cout << x+1 << ' ' << x-1 << ' '<< y+1 << ' ' << y-1 << endl;
-        
-	//Changing Cell types with some probability
-	//having loop of different mutation types
-	//the mutations can only go backwards or forwards by one here
-	
-	
-//	for(int i=1;i<=types;i++){
-//	if(grid[x][y].Type == i && rand()%50 == 2) {
-//		grid[x][y].Type = i+1;
-//		}
-//	}
-	
-//	for(int i=1;i<=types;i++){
-//	if(grid[x][y].Type == i && rand()%50 == 2) {
-//		grid[x][y].Type = i-1;
-//		}
-//	}	
-
+	  
 
 
 
@@ -605,9 +493,10 @@ Grid::Grid(int p){
         t = t + 1;
 	//cout << t << endl;
     }
+	//}
 
 
-
+	/*
 	//making a file to pring phi and distance to.
 	ofstream distfile;
 	distfile.open("phidist.txt",  ios::trunc);
@@ -647,31 +536,7 @@ Grid::Grid(int p){
 	//closing for loop	
 	}
 	
-	//creating an array the size of the lattice for printing 
-	int array [L][L];
-	for (int i =0;i<L;i++){
-	for (int j=0;j<L;j++){
-//	array [i][j]=0;
-	//cout << array[i][j] << endl;
-	}
-	}
-		
-	//now we need to format the printing into an array
-	
-	ofstream arrayfile;
-	arrayfile.open("array.txt",  ios::trunc);
-	for (int i =0;i<L;i++){
-	for (int j=0;j<L;j++){
-	array[i][j]=grid[i][j].Type;
-	arrayfile << array[i][j] << ',';
-	}
-	arrayfile << endl;
-	}	
-		
-	
-	
-	arrayfile.close();
-	
+
 	
 	//here we are outputting the graph of distance vs amount of times where types are similar
 	
@@ -690,7 +555,7 @@ Grid::Grid(int p){
 	}
 	distfile.close();
 
-
+	*/
 //============================ sampling large number of points =============================================
 
 /*
@@ -771,65 +636,7 @@ Grid::Grid(int p){
 //	}
 
 
-
-//===================================================================================
-//===================================================================================
-    //creating distance sampling loop after the tumour has been created
-	//    int x,y,l,m ;
-	//for(int i = 0; i< 10000; i++){
-        //x = rand()%L;
-        //y = rand()%L;
-        //l = rand()%L;
-        //m = rand()%L;
-
- 	//Creating sampling loop
-	//make loop do nothing if the two random points don't contain infected cells
-
-	//want to select a ramdon cell and sample a number of random points around it
-	
-	
-	//if(grid[x][y].Inf == 1){
-	//inside this loop we will pick a number of other points and sample them
-	
-	//for(int i = 0; i<10000; i++){	
-	//l = rand()%L;
-        //m = rand()%L;
-	
-	//if(grid[l][m].Inf==1){
-	
-	//nsamp = nsamp + 1;
-	
-	//if(grid[x][y].Type == 1 && grid[l][m].Type == 1){
-
-	//k=k+1;
-
-	//phi = k/(nsamp);
-	//dis = Dis(x,y,l,m);
-	//distfile << dis << "," << phi << endl;
-	//}
-	
-	//else if(grid[x][y].Type == 2 && grid[l][m].Type == 2){
-	//k=k+1;
-
-	//phi = k/(nsamp);
-	//dis = Dis(x,y,l,m);
-	//distfile << dis << "," << phi << endl;
-	//}
-	//else { //cout << i << endl;
-	//}
-	
-	//}
-	//}
-	//}
-	//}
-
-//==========================================================================
-//==========================================================================
-
-
-
-	
-	//closing the distance file	 
+//closing the distance file	 
 	
 	//if(grid[x][y].Inf == 1 && grid[l][m].Inf == 1){
 	//nsamp = nsamp + 1;
@@ -956,6 +763,36 @@ for (int i = 1; i <= 20; i++) {
 	//			}
 	//myfile << "wat" << endl;
    	//file.close();
+
+
+
+	//creating an array the size of the lattice for printing 
+	int array [L][L];
+	for (int i =0;i<L;i++){
+	for (int j=0;j<L;j++){
+//	array [i][j]=0;
+	//cout << array[i][j] << endl;
+	}
+	}
+		
+	//now we need to format the printing into an array
+	
+	ofstream arrayfile;
+	arrayfile.open("array.txt",  ios::trunc);
+	for (int i =0;i<L;i++){
+	for (int j=0;j<L;j++){
+	array[i][j]=grid[i][j].Type;
+	arrayfile << array[i][j] << ',';
+	}
+	arrayfile << endl;
+	}	
+		
+	
+	
+	arrayfile.close();
+	
+
+
 }
 
 
@@ -1020,7 +857,7 @@ int main() {
     // cout << rand() % 100 + 1 << endl;
     
     //testing with grid of size length and height 100
-    Grid G(1000);
+    Grid G(10000);
 
 	ofstream chifile;
     chifile.open("chi.txt");
