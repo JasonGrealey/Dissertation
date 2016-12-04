@@ -72,7 +72,7 @@ public:
     
    // int IRight();
     
-    // initalising Grid attribute
+    // initalising Grid constructor
     Grid(int p);
     //operator string() const { return "Hi"; }
     
@@ -146,7 +146,6 @@ vector <int> bin (12000);
 
 	
 
-//bin.clear();
 
 
 
@@ -162,7 +161,12 @@ Grid::Grid(int p){
 	gens.push_back(g0) ;
 	
     //argument of Grid becomes length and height of grid
-    L = p;
+    
+	//int * foo;
+	//foo = new int [L];
+
+
+	L = p;
     //defining a grid as a 1-d Cell array
     grid = new Cell*[L];
     for (int i =0; i<L; i ++) {
@@ -189,7 +193,7 @@ Grid::Grid(int p){
         
 		}
    
-    
+    	//delete grid;
     
     
     
@@ -796,10 +800,10 @@ for (int i = 1; i <= 20; i++) {
 
 }
 
+//Grid g
 
 
-
-
+	
 
 
 
@@ -858,7 +862,21 @@ int main() {
     // cout << rand() % 100 + 1 << endl;
     
     //testing with grid of size length and height 100
-    Grid G(10000);
+   // Grid G(2250);
+	Grid *G;
+	G = new Grid(1350);
+	// Grid G(1450);
+
+	//delete [] G;
+
+
+
+
+
+
+
+
+
 
 	ofstream chifile;
     chifile.open("chi.txt");
