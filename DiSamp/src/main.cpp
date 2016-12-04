@@ -372,7 +372,8 @@ Grid::Grid(int p){
         int x,y,l,m ;
         
 	 if( Nmut == 10000 || N == 1000000){
-		cout << N << endl;		
+		cout << "loop finished" << endl;		
+		cout <<	"Ncells = " << N <<" , "<<"Nmut ="<<" "<< Nmut << endl;		
 		break;	
 		}
 
