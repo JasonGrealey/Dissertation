@@ -33,6 +33,9 @@ using namespace std;
 
 int Nmut=1 ;
 int Nspm=0 ;
+int Nmax = 1000000;
+int Nmutmax = 100000;
+int chance = 100;
 
  double Dis(int a, int b, int c, int d)
 	{
@@ -142,7 +145,7 @@ class Genotype {
 //creating genotype vector
 vector <Genotype*> gens ;
 //doing 150000 mutations bin
-vector <int> bin (12000);
+vector <int> bin (110000);
 
 	
 
@@ -375,7 +378,7 @@ Grid::Grid(int p){
        // while(N<=1000000 || Nmut == 100000){
         int x,y,l,m ;
         
-	 if( Nmut == 10000 || N == 1000000){
+	 if( Nmut == Nmutmax || N == Nmax){
 		cout << "loop finished" << endl;		
 		cout <<	"Ncells = " << N <<" , "<<"Nmut ="<<" "<< Nmut << endl;		
 		break;	
@@ -409,7 +412,7 @@ Grid::Grid(int p){
 		
 
             //1 in 100 chance of mutation given infected cell picked
-		if (rand()%100==0) {
+		if (rand()%chance==0) {
 			Nmut++ ;
 		//new type taken on at daughter cell
 			grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Type=Nmut ;
