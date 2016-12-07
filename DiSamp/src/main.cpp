@@ -27,7 +27,7 @@
 #include <vector>
 #include <string>
 #include <ctime>
-#include <sstream>
+//#include <sstream>
 
 using namespace std;
 
@@ -215,7 +215,7 @@ Grid::Grid(int p){
 	double nsamp =0;
 	double phi = 0;
 	double dis;
-	int types = 10;
+
 
 	string filename;
 	ofstream files;
@@ -404,7 +404,7 @@ Grid::Grid(int p){
 	
 
 		N++;
-		if( fmod(N,10000) == 0){
+		if( fmod(N,(Nmax/10)) == 0){
 		cout <<	"Ncells = " << N << " , "  << "Nmut =" << " "  << Nmut << endl;
 		}
 		
@@ -504,48 +504,9 @@ Grid::Grid(int p){
 	//}
 
 
+	
+
 	/*
-	//making a file to pring phi and distance to.
-	ofstream distfile;
-	distfile.open("phidist.txt",  ios::trunc);
-
-	
-	int a = 1.5*L;
-	int hist[a];
-
-	for(int i=0;i<=a;i++){
-	hist[i]=0;
-	//distfile << i << "," << hist[i] << endl;
-	}
-
-	int x,y,l,m;
-	for(int i =0; i<1000000; i++){
-	x = rand()%L;
-        y = rand()%L;
-	l = rand()%L;
-	m = rand()%L;
-	
-	
-	//if two random points have cells present
-	if(grid[x][y].Inf == grid[l][m].Inf && grid[x][y].Inf != 0){
-	
-	//if they're of the same type the
-	if(grid[x][y].Type == grid[l][m].Type){
-	int dis = int( Dis(x,y,l,m));
-	
-	hist[dis] = hist[dis] + 1;
-	//nsamp++;
-			}
-	
-	
-
-	//closing double infection if loop
-		}	
-	//closing for loop	
-	}
-	
-
-	
 	//here we are outputting the graph of distance vs amount of times where types are similar
 	
 	int npoints = 0;	
@@ -562,54 +523,11 @@ Grid::Grid(int p){
 	//cout << i << hist[i] << endl;	
 	}
 	distfile.close();
-
-	*/
+*/
+	
 //============================ sampling large number of points =============================================
 
 /*
-	ofstream xifile;
-	xifile.open("xi.txt",  ios::trunc);
-	int count[types];
-	int xi[types];
-	//
-	for(int i=0;i<=types;i++){
-	count[i]=0;
-	xi[i]=0;
-	//distfile << i << "," << hist[i] << endl;
-	}
-	int b,c;
-	for(int i =0; i<types; i++){
-	b = rand()%L;
-    c = rand()%L;
-	//l = rand()%L;
-	//m = rand()%L;
-	
-	
-	//if cell picked is present, increase count hist
-	if(grid[b][c].Inf == 1){
-	count[grid[b][c].Type] = count[grid[b][c].Type] + 1;
-			}
-	
-	
-	//closing for loop	
-	}
-	
-	for(int i=0;i<=types;i++){
-	for(int j=0;j<=types;j++){
-	
-	if(count[j]==i){
-	xi[i] = xi[i] +1;
-	}			
-			
-		
-		
-			}
-	xifile << i  << ',' << xi[i] << endl;	
-		}
-	xifile.close();
-*/
-
-
 
 
 //	while (nsamp <= 100000) {
@@ -674,103 +592,7 @@ Grid::Grid(int p){
 	//}
 	//}
 	
-
-
-/*
-for (int i = 1; i <= 20; i++) {
-	stringstream a;
-	a << i;
-	//making many types of files
-	filename = "type_" + a.str();
-	filename += ".txt";
-	//checking they exist
-//	cout << filename << endl;
-	files.open(filename.c_str(), ios::trunc);
-	
-	files << 0 << ',' << 0  << endl;
-	
-	for (int l =0; l<L; l ++) {
-		for (int j = 0; j<L; j ++) {
-		if(grid[l][j].Inf==1 && grid[l][j].Type == i){
-		files << l << "," << j << endl;
-			}
-					}
-		
-				
-				}         
-	files.close();
-	//files[l] << "Some rezult " << ;
-    
-	
-	
-}	
-	*/
-	
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    string name = "type_";     //base pattern of file name
-//    ofstream files[types];      //creating array of number of  int 'types' output file streams
-//    for(int l = 1; l <= types; ++l) {   //open all file streams 
-//        files[l].open(name + char('l') + ".txt");
- //   }
-//
- //   for(int l = 1; l <= types; ++l) { // write value of i to i-th stream
-//	for (int i =0; i<L; i ++) {
-//		for (int j = 0; j<L; j ++) {
-//		if(grid[i][j].Inf==1 && grid[i][j].Type == l){
-//		files[l] << i << "," << j << endl;
-//			}
-//					}
-//				}         
-	
-	
-	//files[l] << "Some rezult " << ;
-//    }
-
-	
-  //writing to the file infected type one cells
-  //  ofstream myfile;
-  //  myfile.open("new.txt", ios::trunc);
-	//	for (int i =0; i<L; i ++) {
-	//	for (int j = 0; j<L; j ++) {
-	//	if(grid[i][j].Inf==1 && grid[i][j].Type == 1){
-	//	myfile <<i << "," << j << endl;
-	//		}
-	//				}
-	//			}
-	//myfile << "wat" << endl;
-//   	myfile.close();
-//	//writing type two infected positions
- // ofstream file;
-   // file.open("type2.txt");
-	//for (int i =0; i<L; i ++) {
-	//	for (int j = 0; j<L; j ++) {
-	//	if(grid[i][j].Inf==1 && grid[i][j].Type == 2){
-	//	file << i << "," << j << endl;
-	//	}
-	//					}
-	//			}
-	//myfile << "wat" << endl;
-   	//file.close();
+*/
 
 
 
@@ -859,7 +681,7 @@ int main() {
     // seeding the random number
     srand(time(NULL));
     
-    
+    Nmut = gens.size();
     
     //testing the random number
     // cout << rand() % 100 + 1 << endl;
@@ -876,7 +698,7 @@ int main() {
 
 
 
-
+	
 
 
 
@@ -889,15 +711,15 @@ int main() {
 
 
 
-    cout <<"Ngens="<<gens.size()<<endl ;
+    cout <<"Ngens="<<Nmut<<endl ;
 /*   for (int i=0;i<gens.size();i++)
         {
             gens[i]->print();
             }
   */
   //  cout << gens.size();
-    int chi[gens.size()];
-    for(int i =0;i<=gens.size();i++){
+    int chi[Nmut];
+    for(int i =0;i<=Nmut;i++){
         chi[i]=0;
 	//to compensate for the first mutation being not being counted
 	// i increase the value of chi[1] to compensate for this	
@@ -908,9 +730,9 @@ int main() {
     }
 
 
-    for (int i =0; i<= (gens.size()-1); i++)
+    for (int i =0; i<= (Nmut-1); i++)
     {	//cout << gens[i]->Size() << endl; 
-	for(int j=0; j<=(gens.size()-1); j++)
+	for(int j=0; j<=(Nmut-1); j++)
         {
             int a = gens[j]->Size();
              if(i==a) {
@@ -922,13 +744,13 @@ int main() {
 	}
 	
 	}
-	for (int i = 1; i <= (gens.size()-1); i++){
+	for (int i = 1; i <= (Nmut-1); i++){
 	chifile << i << ',' << chi[i] << endl;
 	}
 	
 	
 	chifile.close();
-	/*for (int i =0; i<=(gens.size()-1); i++)
+	/*for (int i =0; i<=(Nmut -1); i++)
 	{gens[i]-> print();
 	}
 	*/
@@ -968,43 +790,70 @@ int main() {
     //initalising array d
     int* d ;
     
+  //  histd[a] = hist[i]/(double)npoints;
     
     
     
-    
-        int chinew[gens.size()];
-	for(int i=0;i<=(gens.size());i++){
+        int chinew[Nmut];
+	double freq [Nmut];
+	int totmut=0;
+	
+	//initialising
+	for(int i=0;i<=(Nmut);i++){
 	//cout << bin.at(i) << endl;
         chinew[i]=0;
+	freq[i] = 0;
 	}
 
+	
     //now to create a hist bin
     //here we are comparing the actual value form the paper of (Xi) ling et all
-
+	ofstream ffile;
+	ffile.open("fplot.txt");
+    
+	
     
     ofstream chinewfile;
     chinewfile.open("chinew.txt");
-    for (int i =0; i<= (gens.size()-1); i++)
+    for (int i =0; i<= (Nmut-1); i++)
     {	//cout << gens[i]->Size() << endl;
-        for(int j=0; j<=(gens.size()-1); j++)
+        for(int j=0; j<=(Nmut-1); j++)
         {
             if (bin.at(j)==i) {
                 chinew[i]++;
             }
                 
             
-            else{
-            }
+           
         }
         
     }
-    for (int i=0; i<=gens.size(); i++) {
+	
+	
+	//calculating the total number of mutations (not unique) not equal to gens.size()
+	for(int l=0;l<=Nmut;l++){
+	totmut += bin[l];
+	
+	}
+	cout << "Total number of non-unique mutations is = " << totmut << endl;
+	
+	    for (int i=0; i<=Nmut; i++) {
+	freq [i] = bin[i]/(double)totmut;
+   
+	
+ 					   }	
+
+	
+    for (int i=0; i<=Nmut; i++) {
+	//freq [i] = bin[i]/(double)totmut;
         chinewfile << i << ',' << chinew[i] << endl;
         //cout << chinew[i] << endl;
+	ffile << freq[i] << ',' << bin[i] << endl;
+	
     }
     
     chinewfile.close();
-    
+    ffile.close();
 
 
 
