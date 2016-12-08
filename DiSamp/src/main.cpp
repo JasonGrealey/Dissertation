@@ -708,10 +708,15 @@ int main() {
 
 
 
+	ofstream paramfile;
+	paramfile.open("parameter.txt");
 
 
+    paramfile <<Nmut<<endl ;
+	
+	paramfile.close();
 
-    cout <<"Ngens="<<Nmut<<endl ;
+
 /*   for (int i=0;i<gens.size();i++)
         {
             gens[i]->print();
