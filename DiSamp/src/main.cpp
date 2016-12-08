@@ -730,21 +730,20 @@ int main() {
     }
 
 
-    for (int i =0; i<= (Nmut-1); i++)
+    for (int i =0; i<= (Nmut); i++)
     {	//cout << gens[i]->Size() << endl; 
-	for(int j=0; j<=(Nmut-1); j++)
+	for(int j=0; j<=(Nmut); j++)
         {
             int a = gens[j]->Size();
              if(i==a) {
                 chi[i]=chi[i]+1;
              
              }      
-		else{
-                 } 
+		 
 	}
 	
 	}
-	for (int i = 1; i <= (Nmut-1); i++){
+	for (int i = 1; i <= (Nmut); i++){
 	chifile << i << ',' << chi[i] << endl;
 	}
 	
@@ -793,9 +792,10 @@ int main() {
   //  histd[a] = hist[i]/(double)npoints;
     
     
-    
+    	
         int chinew[Nmut];
 	double freq [Nmut];
+	double freqnew[Nmut];
 	int totmut=0;
 	
 	//initialising
@@ -803,6 +803,7 @@ int main() {
 	//cout << bin.at(i) << endl;
         chinew[i]=0;
 	freq[i] = 0;
+	freqnew[i] = 0;
 	}
 
 	
@@ -815,9 +816,9 @@ int main() {
     
     ofstream chinewfile;
     chinewfile.open("chinew.txt");
-    for (int i =0; i<= (Nmut-1); i++)
+    for (int i =0; i<= (Nmut); i++)
     {	//cout << gens[i]->Size() << endl;
-        for(int j=0; j<=(Nmut-1); j++)
+        for(int j=0; j<=(Nmut); j++)
         {
             if (bin.at(j)==i) {
                 chinew[i]++;
@@ -842,13 +843,31 @@ int main() {
    
 	
  					   }	
+	
+	
+for (int i =0; i<= (Nmut); i++)
+    {	//cout << gens[i]->Size() << endl;
+        for(int j=0; j<=(Nmut); j++)
+        {
+		//here making sure we are adding the frequencies of mutations which occur at the same rate
+            if (bin.at(j)==i) {
+		// chinew[i]++;              
+		freqnew[i]+= freq[j];
+            }
+                
+            
+           
+        }
+        
+    }	
+	
 
 	
     for (int i=0; i<=Nmut; i++) {
 	//freq [i] = bin[i]/(double)totmut;
         chinewfile << i << ',' << chinew[i] << endl;
         //cout << chinew[i] << endl;
-	ffile << freq[i] << ',' << bin[i] << endl;
+	ffile << freqnew[i] << ',' << bin[i] << endl;
 	
     }
     
@@ -856,7 +875,7 @@ int main() {
     ffile.close();
 
 
-
+	
 
 
 
