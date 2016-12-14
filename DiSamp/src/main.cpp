@@ -35,12 +35,16 @@
 
 using namespace std;
 
+
+//global variables
+
+int N=1;
 int Nmut=1 ;
 int Nspm=0 ;
-int Nmax = 100000;
-int Nmutmax = 10000;
+int Nmax = 1e4;
+int Nmutmax = 1e2;
 int chance = 100;
-int Lmax=1000 ;
+int Lmax=1350 ;
 
  double Dis(int a, int b, int c, int d)
 	{
@@ -126,7 +130,7 @@ class Genotype {
   void print() {
     for (int i=0;i<mutations.size();i++) cout <<mutations[i]<<" " ; cout <<endl ;
                 }
-    //function to return the number of mutations present in a cell
+    //function to return the number of mutations present in a genotype
     int Size()
     {
         int sum=0;
@@ -157,11 +161,11 @@ vector <int> bin (110000);
 
 
 
-//creating number vector
-//vector <int> numb;
 
 
-//grid constructor
+
+//grid constructor with length argument
+
 Grid::Grid(int p){
     //initalising genotypes into the grid
 	Genotype *g0=new Genotype() ;
@@ -204,15 +208,6 @@ Grid::Grid(int p){
 
 	//setting time parameter
 	int t = 0;
-	// setting number of infected parameter
-	
-	// setting matching parameter which is 1 if sampled types are the same and 0 otherwise 
-	double k = 0;
-	int N=1;
-	double nsamp =0;
-	double phi = 0;
-	double dis;
-
 
 #ifdef WELL_MIXED
   //this will be now compiled 
@@ -431,17 +426,6 @@ cout << "This is the Spatial Model" << endl;
 
 }
 
-//Grid g
-
-
-	
-
-
-
-
-
-
-
 //method for checking where infected cell is
 // pulling array with Grid attributes and initialising the function Iteration
 int *Grid::Iteration(){
@@ -486,18 +470,23 @@ void 	Grid::find_mut_frequency(char *name)
 {
   float mutfreq[Nmut] ;
   int Ntot=0 ;
+	
   for (int i=0;i<Nmut;i++) mutfreq[i]=0 ;
   ofstream file(name) ;
+	//summing the whole lattice
   for (int i=0; i<L; i++){
     for (int j=0; j<L; j++){
+	//if cell is present
       if (grid[i][j].Inf == 1) {
         Ntot++ ;
+	//create genotype array taking argument of cells mutation type
         Genotype *g=gens[grid[i][j].Type-1] ;
+	//loop so that each mutation frequency gets bumped
         for (int k=0;k<g->mutations.size();k++) mutfreq[g->mutations[k]]++ ;     
       }
     }
   }
-  
+  // now outputting for all mutations frequency the fraction of the mutation occurance
   for (int i=0;i<Nmut;i++) file <<1.*mutfreq[i]/Ntot<<endl ;
   file.close() ; 
 }
@@ -593,7 +582,10 @@ int main() {
 	Grid *G;
 	G = new Grid(Lmax);
 	// Grid G(1450);
-
+	
+	for (int i=0;i<gens.size();i++){ 
+	gens[i]->print();
+					}
 
 
 	G->find_mut_frequency("mutfreq.txt") ;
