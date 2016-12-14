@@ -39,7 +39,7 @@ using namespace std;
 //global variables
 
 int N=1;
-int Nmut=1 ;
+int Nmut=0 ;
 int Nspm=0 ;
 int Nmax = 1e4;
 int Nmutmax = 1e2;
