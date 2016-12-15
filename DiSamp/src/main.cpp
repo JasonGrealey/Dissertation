@@ -18,8 +18,8 @@
 //################################################################################################################
 //################################################################################################################
 
-#define WELL_MIXED
-//#define SPATIAL
+//#define WELL_MIXED
+#define SPATIAL
 
 
 
@@ -35,16 +35,21 @@
 
 using namespace std;
 
+void err(char *txt)
+{
+  cout <<txt<<endl ;
+  system("pause") ; 
+}
 
 //global variables
 
 int N=1;
 int Nmut=0 ;
 int Nspm=0 ;
-int Nmax = 1e4;
-int Nmutmax = 1e2;
+int Nmax = 2e8;
+//int Nmutmax = 1e4;
 int chance = 100;
-int Lmax=1350 ;
+int Lmax=20000 ; //1350 ;
 
  double Dis(int a, int b, int c, int d)
 	{
@@ -143,8 +148,9 @@ class Genotype {
 	void MutCount(vector<int> &mutbin){
 	for (int i=0;i<mutations.size();i++){
 	//vector <int> mutbin;
-		mutbin[mutations[i]] = mutbin[mutations[i]] +1;
-
+	   if (mutations[i]<0 || mutations[i]>=mutbin.size()) err("mutations outside range") ;
+		mutbin[mutations[i]]++ ;
+    
 		}	
 	}
 
@@ -219,7 +225,7 @@ cout << "This is the Well-Mixed Model" << endl;
         
         int x,y,l,m ;
         
-		 if( Nmut == Nmutmax || N == Nmax){
+		 if( N == Nmax){
 		cout << "loop finished" << endl;		
 		cout <<	"Ncells = " << N <<" , "<<"Nmut ="<<" "<< Nmut << endl;		
 		break;	
@@ -228,18 +234,12 @@ cout << "This is the Well-Mixed Model" << endl;
 
 
 	do {
-            x = rand()%L;
-            y = rand()%L;
-		l=rand()%L;
-		m=rand()%L;
+	x = rand()%L;
+	y = rand()%L;
+	l=rand()%L;
+	m=rand()%L;
             //if randomly selecting a infected cell
         } while(grid[x][y].Inf == 0) ;
-
-
-
-	 //number of cells increases
-	
-
 
 	if (grid[(l)%L][(m)%L].Inf==0) {
 		grid[(l)%L][(m)%L].Inf=1 ;
@@ -320,7 +320,7 @@ cout << "This is the Spatial Model" << endl;
        // while(N<=1000000 || Nmut == 100000){
         int x,y,l,m ;
         
-	 if( Nmut == Nmutmax || N == Nmax){
+	 if( N == Nmax){
 		cout << "loop finished" << endl;		
 		cout <<	"Ncells = " << N <<" , "<<"Nmut ="<<" "<< Nmut << endl;		
 		break;	
@@ -362,12 +362,12 @@ cout << "This is the Spatial Model" << endl;
 		
 		//new genotype takes parents type - 1
 
-		Genotype *gnew=new Genotype(gens[grid[x][y].Type -1]) ;
+		  Genotype *gnew=new Genotype(gens[grid[x][y].Type -1]) ;
 
 		//this new genotype is then pushed to the back of the daugthers genotype
 		//also from argument of the constructor we add Nmut++ also
-		gnew->MutCount(bin);
-            gens.push_back(gnew) ;
+		  gnew->MutCount(bin);
+      gens.push_back(gnew) ;
 		
 		}
             //replication only
@@ -396,20 +396,16 @@ cout << "This is the Spatial Model" << endl;
 
 
 
-
 	//creating an array the size of the lattice for printing 
-	int array [L][L];
-	for (int i =0;i<L;i++){
-	for (int j=0;j<L;j++){
-//	array [i][j]=0;
-	//cout << array[i][j] << endl;
-	}
-	}
+//	int array[L][L];
+  int **array=new int*[L] ;
+	for (int i =0;i<L;i++) array[i]=new int[L] ;
+
 		
 	//now we need to format the printing into an array
 	
 	ofstream arrayfile;
-	arrayfile.open("array.txt",  ios::trunc);
+	arrayfile.open("array.txt");
 	for (int i =0;i<L;i++){
 	for (int j=0;j<L;j++){
 	array[i][j]=grid[i][j].Type;
@@ -466,7 +462,7 @@ int *Grid::Iteration(){
 }
 
 //method for 1/f distribution
-void 	Grid::find_mut_frequency(char *name)
+void 	Grid::find_mut_frequency(char name[])
 {
   float mutfreq[Nmut] ;
   int Ntot=0 ;
@@ -493,7 +489,7 @@ void 	Grid::find_mut_frequency(char *name)
 
 
 //method for 1/f distribution
-void 	Grid::find_chi(char *name)
+void 	Grid::find_chi(char name[])
 {
   int chi[Nmut];
   int Ntot=0 ;
@@ -531,7 +527,7 @@ void 	Grid::find_chi(char *name)
 }
 
 
-void Grid::find_xi(char *name) 
+void Grid::find_xi(char name[]) 
 {
 
   ofstream file(name) ;
@@ -574,19 +570,17 @@ int main() {
     // seeding the random number
     srand(time(NULL));
     
-    //testing the random number
-    // cout << rand() % 100 + 1 << endl;
-    
     //testing with grid of size length and height 100
    // Grid G(2250);
 	Grid *G;
 	G = new Grid(Lmax);
 	// Grid G(1450);
-	
+
+/*	
 	for (int i=0;i<gens.size();i++){ 
 	gens[i]->print();
-					}
-
+				}
+*/	
 
 	G->find_mut_frequency("mutfreq.txt") ;
 	G->find_chi("chi.txt") ;
@@ -613,6 +607,7 @@ int main() {
     //}
     //cout << endl;
     
+   // system("pause");
 
     return 0;
 } 
