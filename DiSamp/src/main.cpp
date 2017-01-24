@@ -11,13 +11,16 @@
 //################################################################################################################
 //################################################################################################################
 	//LOOK AT CHANGING RANDOM NUMBER GENERATOR 	
-	// Xi, is now the number of times which any certain mutation appears, eg is mut 1 occurs 100 times then xi_100 ++ 
 
 //################################################################################################################
 //################################################################################################################
 //################################################################################################################
 //################################################################################################################
 //################################################################################################################
+
+//#define WELL_MIXED
+#define SPATIAL
+
 
 
 #include <iostream>
@@ -27,12 +30,26 @@
 #include <vector>
 #include <string>
 #include <ctime>
-#include <sstream>
+//#include <sstream>
+//#include <math>
 
 using namespace std;
 
-int Nmut=1 ;
+void err(char *txt)
+{
+  cout <<txt<<endl ;
+  system("pause") ; 
+}
+
+//global variables
+
+int N=1;
+int Nmut=0 ;
 int Nspm=0 ;
+int Nmax = 2e8;
+//int Nmutmax = 1e4;
+int chance = 100;
+int Lmax=20000 ; //1350 ;
 
  double Dis(int a, int b, int c, int d)
 	{
@@ -72,9 +89,15 @@ public:
     
    // int IRight();
     
-    // initalising Grid attribute
+    // initalising Grid constructor
     Grid(int p);
     //operator string() const { return "Hi"; }
+
+    void 	find_mut_frequency(char *name) ;
+	 void 	find_chi(char *name) ;
+	 void 	find_xi(char *name) ;
+
+
     
 };
 
@@ -112,7 +135,7 @@ class Genotype {
   void print() {
     for (int i=0;i<mutations.size();i++) cout <<mutations[i]<<" " ; cout <<endl ;
                 }
-    //function to return the number of mutations present in a cell
+    //function to return the number of mutations present in a genotype
     int Size()
     {
         int sum=0;
@@ -125,36 +148,35 @@ class Genotype {
 	void MutCount(vector<int> &mutbin){
 	for (int i=0;i<mutations.size();i++){
 	//vector <int> mutbin;
-		mutbin[mutations[i]] = mutbin[mutations[i]] +1;
-
+	   if (mutations[i]<0 || mutations[i]>=mutbin.size()) err("mutations outside range") ;
+		mutbin[mutations[i]]++ ;
+    
 		}	
 	}
 
-/*	void MutCount(int *mutbin){
-	for (int i=0;i<mutations.size();i++){
-	//vector <int> mutbin;
-	mutbin[mutations[i]] = mutbin[mutations[i]] + 1;
-		}	
-	}
-*/
+
 };
 
 //creating genotype vector
 vector <Genotype*> gens ;
+<<<<<<< HEAD
 
 vector <int> bin (1000200);
+=======
+//doing 150000 mutations bin
+vector <int> bin (110000);
+>>>>>>> ae4a354910ac9808cf692e99834756518bf6954c
 
 	
 
-//bin.clear();
 
 
 
-//creating number vector
-//vector <int> numb;
 
 
-//grid constructor
+
+//grid constructor with length argument
+
 Grid::Grid(int p){
     //initalising genotypes into the grid
 	Genotype *g0=new Genotype() ;
@@ -162,7 +184,12 @@ Grid::Grid(int p){
 	gens.push_back(g0) ;
 	
     //argument of Grid becomes length and height of grid
-    L = p;
+    
+	//int * foo;
+	//foo = new int [L];
+
+
+	L = p;
     //defining a grid as a 1-d Cell array
     grid = new Cell*[L];
     for (int i =0; i<L; i ++) {
@@ -189,173 +216,95 @@ Grid::Grid(int p){
         
 		}
    
-    
-    
-    
-    
-    
-    
-	//want a timestep method so we can randomly choose cell that is infected and spread to /
-	// neighbour
-    
+
 	//setting time parameter
 	int t = 0;
-	// setting number of infected parameter
-	//double n = 1;vector<int>* random
-	// setting matching parameter which is 1 if sampled types are the same and 0 otherwise 
-	double k = 0;
-	int N=1;
-	double nsamp =0;
-	double phi = 0;
-	double dis;
-	int types = 10;
 
-	string filename;
-	ofstream files;
-	//defining parameter p	
-	//double phi;
-	//double ntimesteps = 100000;
-	//double tnorm = t/ntimesteps;
-	
+#ifdef WELL_MIXED
+  //this will be now compiled 
 
-	
-	//now to remove the spatial dependence
-
-//int bin[gens.size()];
-//for int
-//-1
+cout << "This is the Well-Mixed Model" << endl;
 
 
-
-
-/*
-
-    while (t <= 100000) {
+    while (t <= 100000000) {
         
         int x,y,l,m ;
-        do {
-            x = rand()%L;
-            y = rand()%L;
-		l=rand()%L;
-		m=rand()%L;
+        
+		 if( N == Nmax){
+		cout << "loop finished" << endl;		
+		cout <<	"Ncells = " << N <<" , "<<"Nmut ="<<" "<< Nmut << endl;		
+		break;	
+			}
+
+
+
+	do {
+	x = rand()%L;
+	y = rand()%L;
+	l=rand()%L;
+	m=rand()%L;
             //if randomly selecting a infected cell
         } while(grid[x][y].Inf == 0) ;
-*/
 
-	/*
-        //constant arrays to choose spread direction
-	const int dx[4]={1,0,-1,0},dy[4]={0,1,0,-1} ;
-        //random integer to choose direction of spread
-	int d=rand()%4 ;
-            //replication and mutation
-	
-
-	*/
-
-
-	/*	if (grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Inf==0) {
-		grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Inf=1 ;
-	  */         
-
-
-
-	 //number of cells increases
-	
-
-/*
 	if (grid[(l)%L][(m)%L].Inf==0) {
 		grid[(l)%L][(m)%L].Inf=1 ;
             //number of cells increases
 	
 
 		N++;
-		
-		
-		
-		
-
+	
+		if( (N%(Nmax/10)) == 0){
+		cout <<	"Ncells = " << N << " , "  << "Nmut =" << " "  << Nmut << endl;
+		}
             //1 in 100 chance of mutation given infected cell picked
 	
 		
 		if (rand()%100==0) {
 			Nmut++ ;
 
-		//cout << " a " << endl;
-		//new type taken on at daughter cell
-	//			grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Type=Nmut ;
 
-		// non spatial
+		//new type taken on at daughter cell
+
+
+
 
 			grid[(l)%L][(m)%L].Type=Nmut ;
 
-		//cout << "b" << endl;
+
 		
 		//want here to update the number             
 		
 		//new genotype takes parents type - 1
 
 		Genotype *gnew=new Genotype(gens[grid[x][y].Type -1]) ;
-		//cout << "c" << endl;
+
 		//this new genotype is then pushed to the back of the daugthers genotype
 		//also from argument of the constructor we add Nmut++ also
 		gnew->MutCount(bin);
-		//cout << "d" << endl;
- 		
-	
-			
+
 		gens.push_back(gnew) ;
-		//cout << "e" << endl;		
+	
 	}
-           
-		
 
 				 //replication only
             else {
 
-			
-                //again number of cells increases
-		//	grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Type=grid[x][y].Type ;
-		//non spatial		
-	
 			//new random cell takes same type 
-			
-		//	cout << "a" << endl;	
+
 			grid[(l)%L][(m)%L].Type = grid[x][y].Type ;
 	
 			//counting mutations present in the parent cell
 			gens[grid[x][y].Type-1]->MutCount(bin);
-	//		for(int i=1;i<gens.size();i++){cout << bin[i] << endl;};
+
 		}
 	}
-	        else{
-
-        }
 
 
-
-
-	
-	//here write to a new file the value of k/n for 100 timesteps        
-        //if( fmod(t,100) == 0 && t >= 2500){
-	//...
-	//phi = k/(nsamp);
-	//ofstream timefile;
-	//timefile.open("phitime.txt", ios::trunc);
-	
-	//cout << t << " " << nsamp << " " << k << endl;
-	//distfile << t << "," << phi << endl;
-
-	//closing the phi file
-	
-	//}
         
         t = t + 1;
-	//cout << t << endl;
     }
 
-
-*/
-
+#endif
 
 
 
@@ -365,12 +314,33 @@ Grid::Grid(int p){
 
 
 
+
+#ifdef SPATIAL
 //	spatial loop
+<<<<<<< HEAD
     while(Nmut<=100000 || N<=1000000){
     while (t <= 40000000) {
         
+=======
+
+cout << "This is the Spatial Model" << endl;
+
+
+    while (t <= 1000000000) {
+       // while(N<=1000000 || Nmut == 100000){
+>>>>>>> ae4a354910ac9808cf692e99834756518bf6954c
         int x,y,l,m ;
-        do {
+        
+	 if( N == Nmax){
+		cout << "loop finished" << endl;		
+		cout <<	"Ncells = " << N <<" , "<<"Nmut ="<<" "<< Nmut << endl;		
+		break;	
+		}
+
+
+
+	do {
+		
             x = rand()%L;
             y = rand()%L;
             //if randomly selecting a infected cell
@@ -380,13 +350,16 @@ Grid::Grid(int p){
         //random integer to choose direction of spread
 	int d=rand()%4 ;
             //replication and mutation
+		  
 	if (grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Inf==0) {
 		grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Inf=1 ;
             //number of cells increases
 	
 
 		N++;
-		
+		if( (N%(Nmax/10)) == 0){
+		cout <<	"Ncells = " << N << " , "  << "Nmut =" << " "  << Nmut << endl;
+		}
 		
 		
         if( fmod(4000000,t) == 0){
@@ -394,7 +367,7 @@ Grid::Grid(int p){
         }
 
             //1 in 100 chance of mutation given infected cell picked
-		if (rand()%100==0) {
+		if (rand()%chance==0) {
 			Nmut++ ;
 		//new type taken on at daughter cell
 			grid[(x+dx[d]+L)%L][(y+dy[d]+L)%L].Type=Nmut ;
@@ -402,12 +375,12 @@ Grid::Grid(int p){
 		
 		//new genotype takes parents type - 1
 
-		Genotype *gnew=new Genotype(gens[grid[x][y].Type -1]) ;
+		  Genotype *gnew=new Genotype(gens[grid[x][y].Type -1]) ;
 
 		//this new genotype is then pushed to the back of the daugthers genotype
 		//also from argument of the constructor we add Nmut++ also
-		gnew->MutCount(bin);
-            gens.push_back(gnew) ;
+		  gnew->MutCount(bin);
+      gens.push_back(gnew) ;
 		
 		}
             //replication only
@@ -418,6 +391,7 @@ Grid::Grid(int p){
 	//		for(int i=1;i<gens.size();i++){cout << bin[i] << endl;};
 		}
 	}
+<<<<<<< HEAD
 	      
 //===================================rightwards===================================
         
@@ -544,67 +518,20 @@ Grid::Grid(int p){
 
 
 
+=======
+	  
+>>>>>>> ae4a354910ac9808cf692e99834756518bf6954c
 
 
 
-	//	}
-	//if(grid[x][y].Type == 1 && rand()%50 == 2) {
-	//	grid[x][y].Type = 2;
-	//	}
-	//if(grid[x][y].Type == 2 && rand()%50 == 1) {
-	//	grid[x][y].Type = 1;
-	//	}
-		
-
-	        
-        //Creating sampling loop
-	//make loop do nothing if the two random points don't contain infected cells
-	
-	//if both random cells are infected and of the same type increase k.
-	//if(grid[x][y].Inf == 1 && grid[l][m].Inf == 1){
-	//nsamp = nsamp + 1;
-	//if(grid[x][y].Type == 2 && grid[l][m].Type == 2){
-	//k= k+ 1;
-	
 
 
 
-	// NEED TO MOVE THIS DISTANCE SAMPLING OUTSIDE OF THE TIME LOOP
-	//------------------------------------------------------------
-	//we want the distance between these two sampled points
-	//and to print the distance and 
-	//phi = k/(nsamp);	
-	//dis = Dis(x,y,l,m);
-	//distfile << dis << "," << phi << endl;
-	//	}
-	//else if(grid[x][y].Type == 1 && grid[l][m].Type == 1){
-	//k= k+ 1;
-	//phi = k/(nsamp);	
-	//dis = Dis(x,y,l,m);
-	//distfile << phi << "," << dis << endl;
-	//	}
-	//else {
-	//}
-	//}
-	
-	
-	//here write to a new file the value of k/n for 100 timesteps        
-        //if( fmod(t,100) == 0 && t >= 2500){
-	//...
-	//phi = k/(nsamp);
-	//ofstream timefile;
-	//timefile.open("phitime.txt", ios::trunc);
-	
-	//cout << t << " " << nsamp << " " << k << endl;
-	//distfile << t << "," << phi << endl;
 
-	//closing the phi file
-	
-	//}
-        
         t = t + 1;
 	//cout << t << endl;
     }
+<<<<<<< HEAD
     }
 
 /*
@@ -612,36 +539,16 @@ Grid::Grid(int p){
 	ofstream distfile;
 	distfile.open("phidist.txt",  ios::trunc);
 
-	
-	int a = 1.5*L;
-	int hist[a];
+=======
+	//}
 
-	for(int i=0;i<=a;i++){
-	hist[i]=0;
-	//distfile << i << "," << hist[i] << endl;
-	}
-
-	int x,y,l,m;
-	for(int i =0; i<1000000; i++){
-	x = rand()%L;
-        y = rand()%L;
-	l = rand()%L;
-	m = rand()%L;
-	
-	
-	//if two random points have cells present
-	if(grid[x][y].Inf == grid[l][m].Inf && grid[x][y].Inf != 0){
-	
-	//if they're of the same type the
-	if(grid[x][y].Type == grid[l][m].Type){
-	int dis = int( Dis(x,y,l,m));
-	
-	hist[dis] = hist[dis] + 1;
-	//nsamp++;
-			}
-	
+#endif
+>>>>>>> ae4a354910ac9808cf692e99834756518bf6954c
 	
 
+
+
+<<<<<<< HEAD
 	//closing double infection if loop
 		}	
 	//closing for loop	
@@ -980,18 +887,33 @@ for (int i = 1; i <= 20; i++) {
     
     
     
+=======
+	//creating an array the size of the lattice for printing 
+//	int array[L][L];
+  int **array=new int*[L] ;
+	for (int i =0;i<L;i++) array[i]=new int[L] ;
+
+		
+	//now we need to format the printing into an array
+	
+	ofstream arrayfile;
+	arrayfile.open("array.txt");
+	for (int i =0;i<L;i++){
+	for (int j=0;j<L;j++){
+	array[i][j]=grid[i][j].Type;
+	arrayfile << array[i][j] << ',';
+	}
+	arrayfile << endl;
+	}	
+		
+	
+	
+	arrayfile.close();
+	
+
+
+>>>>>>> ae4a354910ac9808cf692e99834756518bf6954c
 }
-
-
-
-
-
-
-
-
-
-
-
 
 //method for checking where infected cell is
 // pulling array with Grid attributes and initialising the function Iteration
@@ -1032,6 +954,7 @@ int *Grid::Iteration(){
     return index;
 }
 
+<<<<<<< HEAD
 
 int main() {
     
@@ -1064,116 +987,143 @@ int main() {
   //  cout << gens.size();
     int chi[gens.size()];
     for(int i =0;i<=gens.size();i++){
+=======
+//method for 1/f distribution
+void 	Grid::find_mut_frequency(char name[])
+{
+  float mutfreq[Nmut] ;
+  int Ntot=0 ;
+	
+  for (int i=0;i<Nmut;i++) mutfreq[i]=0 ;
+  ofstream file(name) ;
+	//summing the whole lattice
+  for (int i=0; i<L; i++){
+    for (int j=0; j<L; j++){
+	//if cell is present
+      if (grid[i][j].Inf == 1) {
+        Ntot++ ;
+	//create genotype array taking argument of cells mutation type
+        Genotype *g=gens[grid[i][j].Type-1] ;
+	//loop so that each mutation frequency gets bumped
+        for (int k=0;k<g->mutations.size();k++) mutfreq[g->mutations[k]]++ ;     
+      }
+    }
+  }
+  // now outputting for all mutations frequency the fraction of the mutation occurance
+  for (int i=0;i<Nmut;i++) file <<1.*mutfreq[i]/Ntot<<endl ;
+  file.close() ; 
+}
+
+
+//method for 1/f distribution
+void 	Grid::find_chi(char name[])
+{
+  int chi[Nmut];
+  int Ntot=0 ;
+  ofstream file(name) ;
+	//initalising
+    for(int i =0;i<=Nmut;i++){
+>>>>>>> ae4a354910ac9808cf692e99834756518bf6954c
         chi[i]=0;
 	//to compensate for the first mutation being not being counted
 	// i increase the value of chi[1] to compensate for this	
 	if(i==1){
 		chi[i]=chi[i]+1;
 		}       
-       // cout << chi[i] << ' ' << i << endl;
     }
 
 
-    for (int i =0; i<= (gens.size()-1); i++)
-    {	//cout << gens[i]->Size() << endl; 
-	for(int j=0; j<=(gens.size()-1); j++)
+    for (int i =0; i< (Nmut); i++)
+    {
+	for(int j=0; j<(Nmut); j++)
         {
+	//a is #mutations in a genotype
             int a = gens[j]->Size();
              if(i==a) {
                 chi[i]=chi[i]+1;
              
              }      
-		else{
-                 } 
+		 
 	}
+
 	
 	}
-	for (int i = 1; i <= (gens.size()-1); i++){
-	chifile << i << ',' << chi[i] << endl;
+	for (int i = 1; i <= (Nmut); i++){
+	file << i << ',' << chi[i] << endl;
 	}
-	
-	
-	chifile.close();
-	/*for (int i =0; i<=(gens.size()-1); i++)
-	{gens[i]-> print();
-	}
-	*/
-	
-        /*for(int j=0;j<=100; j++)
-        {
-            int a = gens[j]->Size();
-             if(i==a) {
-                chi[i]=chi[i]+1;
-                cout<<chi[i] <<' '<< i<< endl;
-             }
-             else{
-                 } */
-            
-            /*(i==gens[j]->Size()){
-                chi[i]++;
-               cout << chi[i] << endl;
-            }*/
-        //gens[i]->Size();
-    
-      //    cout << chi[i] << endl;
-        //Genotype *a;
-        //a[i] = gens[i];
-       // gens[i]->print()
-    //}
+	  file.close() ; 
+}
 
 
+void Grid::find_xi(char name[]) 
+{
 
-    //printing the grid
-    //cout << G;
-    
-/*	for (int i =0; i<=(gens.size()-1);i++){
-	cout<<bin[i]<<endl;
-	}
-*/    
-   
-    //initalising array d
-    int* d ;
+  ofstream file(name) ;
     
     
-    
-    
-    
-        int chinew[gens.size()];
-	for(int i=0;i<=(gens.size());i++){
-	//cout << bin.at(i) << endl;
+    	
+        int chinew[Nmut];
+	//initialising
+	for(int i=0;i<=(Nmut);i++){
         chinew[i]=0;
 	}
-
-    //now to create a hist bin
     //here we are comparing the actual value form the paper of (Xi) ling et all
 
-    
-    ofstream chinewfile;
-    chinewfile.open("chinew.txt");
-    for (int i =0; i<= (gens.size()-1); i++)
-    {	//cout << gens[i]->Size() << endl;
-        for(int j=0; j<=(gens.size()-1); j++)
+    for (int i =0; i<= (Nmut); i++)
+    {	
+        for(int j=0; j<=(Nmut); j++)
         {
             if (bin.at(j)==i) {
                 chinew[i]++;
             }
-                
-            
-            else{
-            }
+ 
         }
         
     }
-    for (int i=0; i<=gens.size(); i++) {
-        chinewfile << i << ',' << chinew[i] << endl;
-        //cout << chinew[i] << endl;
+
+    for (int i=0; i<=Nmut; i++) {
+ 	file << i << ',' << chinew[i] << endl;
+
     }
+
+	  file.close() ; 
+}
+
+
+
+
+
+int main() {
     
-    chinewfile.close();
+    // seeding the random number
+    srand(time(NULL));
+    
+    //testing with grid of size length and height 100
+   // Grid G(2250);
+	Grid *G;
+	G = new Grid(Lmax);
+	// Grid G(1450);
+
+/*	
+	for (int i=0;i<gens.size();i++){ 
+	gens[i]->print();
+				}
+*/	
+
+	G->find_mut_frequency("mutfreq.txt") ;
+	G->find_chi("chi.txt") ;
+	G->find_xi("xi.txt") ;
+
+    //printing the grid
+    //cout << G;
     
 
+   
+    //initalising array d
+    int* d ;
+    
 
-
+	
 
 
 
@@ -1185,6 +1135,7 @@ int main() {
     //}
     //cout << endl;
     
+   // system("pause");
 
     return 0;
 } 
