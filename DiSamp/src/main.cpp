@@ -142,7 +142,7 @@ class Genotype {
 //creating genotype vector
 vector <Genotype*> gens ;
 
-vector <int> bin (10000);
+vector <int> bin (1000200);
 
 	
 
@@ -366,8 +366,8 @@ Grid::Grid(int p){
 
 
 //	spatial loop
-
-    while (t <= 10000000) {
+    while(Nmut<=100000 || N<=1000000){
+    while (t <= 40000000) {
         
         int x,y,l,m ;
         do {
@@ -389,7 +389,9 @@ Grid::Grid(int p){
 		
 		
 		
-		
+        if( fmod(4000000,t) == 0){
+            cout<< "Ncells=" << N << endl;
+        }
 
             //1 in 100 chance of mutation given infected cell picked
 		if (rand()%100==0) {
@@ -416,9 +418,7 @@ Grid::Grid(int p){
 	//		for(int i=1;i<gens.size();i++){cout << bin[i] << endl;};
 		}
 	}
-	        else{
-
-        }
+	      
 //===================================rightwards===================================
         
         //if(grid[x][(y+1)%L].Inf == 0 && grid[x][y].Type == 1 && rand()%5 !=0) {
@@ -605,9 +605,9 @@ Grid::Grid(int p){
         t = t + 1;
 	//cout << t << endl;
     }
+    }
 
-
-
+/*
 	//making a file to pring phi and distance to.
 	ofstream distfile;
 	distfile.open("phidist.txt",  ios::trunc);
@@ -647,32 +647,7 @@ Grid::Grid(int p){
 	//closing for loop	
 	}
 	
-	//creating an array the size of the lattice for printing 
-	int array [L][L];
-	for (int i =0;i<L;i++){
-	for (int j=0;j<L;j++){
-//	array [i][j]=0;
-	//cout << array[i][j] << endl;
-	}
-	}
-		
-	//now we need to format the printing into an array
-	
-	ofstream arrayfile;
-	arrayfile.open("array.txt",  ios::trunc);
-	for (int i =0;i<L;i++){
-	for (int j=0;j<L;j++){
-	array[i][j]=grid[i][j].Type;
-	arrayfile << array[i][j] << ',';
-	}
-	arrayfile << endl;
-	}	
-		
-	
-	
-	arrayfile.close();
-	
-	
+ 
 	//here we are outputting the graph of distance vs amount of times where types are similar
 	
 	int npoints = 0;	
@@ -689,7 +664,7 @@ Grid::Grid(int p){
 	//cout << i << hist[i] << endl;	
 	}
 	distfile.close();
-
+*/
 
 //============================ sampling large number of points =============================================
 
@@ -956,6 +931,55 @@ for (int i = 1; i <= 20; i++) {
 	//			}
 	//myfile << "wat" << endl;
    	//file.close();
+    
+    
+    
+    
+    //creating an array the size of the lattice for printing
+    int array [L][L];
+    for (int i =0;i<L;i++){
+        for (int j=0;j<L;j++){
+            //	array [i][j]=0;
+            //cout << array[i][j] << endl;
+        }
+    }
+    
+    //now we need to format the printing into an array
+    
+    ofstream arrayfile;
+    arrayfile.open("array.txt",  ios::trunc);
+    for (int i =0;i<L;i++){
+        for (int j=0;j<L;j++){
+            array[i][j]=grid[i][j].Type;
+            arrayfile << array[i][j] << ',';
+        }
+        arrayfile << endl;
+    }	
+    
+    
+    
+    arrayfile.close();
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }
 
 
@@ -1020,8 +1044,8 @@ int main() {
     // cout << rand() % 100 + 1 << endl;
     
     //testing with grid of size length and height 100
-    Grid G(1000);
-
+   // Grid G(100000);
+     Grid G(100000);
 	ofstream chifile;
     chifile.open("chi.txt");
 
@@ -1029,8 +1053,9 @@ int main() {
 
 
 
-
+   
     cout <<"Ngens="<<gens.size()<<endl ;
+    
 /*   for (int i=0;i<gens.size();i++)
         {
             gens[i]->print();
